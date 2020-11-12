@@ -4,28 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading;
+using System.Net;
+using System.Net.Sockets;
+
 public class Player : MonoBehaviour
 {
     public Client client;
     public GameObject card;
     private List<GameObject> cards=new List<GameObject>();
-    public List<string> cardString;
 
     void Start()
     {
         Screen.SetResolution(620,454,false);
         client=new Client(this);
         client.SetupClient();
-        cardString=SomethingToTest.CardGen();
-        for(int i=0;i<0;i++)
-        {
-            GameObject temp = Instantiate(card,new Vector3(0,0,0),Quaternion.identity);
-            temp.transform.SetParent(this.gameObject.transform);
-            Debug.Log(cardString[i]);
-            temp.gameObject.GetComponent<Image>().sprite = CardSprites.sprites[cardString[i]];
-            temp.GetComponent<CardValues>().setValues(cardString[i]);
-            cards.Add(temp);
-        }
     }
 
         public void GiveCards(string s)
@@ -39,7 +31,6 @@ public class Player : MonoBehaviour
                     Debug.Log("Od give cards: "+ str);
                     GameObject temp = Instantiate(card,new Vector3(0,0,0),Quaternion.identity);
                     temp.transform.SetParent(this.gameObject.transform);
-                    //Debug.Log(cardString[i]);
                     temp.gameObject.GetComponent<Image>().sprite = CardSprites.sprites[str];
                     temp.GetComponent<CardValues>().setValues(str);
                     cards.Add(temp);
@@ -49,20 +40,33 @@ public class Player : MonoBehaviour
         }  
     void Update()
     {
-        if(client.message!="")
+        if(client.message!="") 
         {
-            Debug.Log("Fifth thread:" + Thread.CurrentThread.ManagedThreadId);
-            string mes=client.message;
-            client.message="";
-            Debug.Log("Od gracza: " + mes);
-            GiveCards(mes);
+            Debug.Log("Od gracza: " + client.message);
+            Reaction(client.GetClientSocket(),client.message);
         }
+    }
+
+    void Reaction(Socket socket, string message)
+    {
+            if(message.IndexOf("Cards")!=-1)
+            {
+                string cardsString=message.Substring(message.IndexOf(':')+1);
+                GiveCards(cardsString);
+                Debug.Log("Cards Acquired");
+                client.SendMessage("CardsAcquired");
+            }
+            else if(message=="masakra")
+            {
+                Debug.Log("You crazy son of a bitch, you did it!");
+            }
+            client.message="";
     }
 
     void OnApplicationQuit()
     {
         client.Disconnect();
-        
+        Environment.Exit(Environment.ExitCode);
     }
 }
 

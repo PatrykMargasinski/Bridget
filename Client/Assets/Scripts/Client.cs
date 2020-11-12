@@ -12,7 +12,6 @@ public class Client
     private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     private Player player;
     public string message="";
-    public string lastMessage="";
     // Start is called before the first frame update
         public Client(Player pl)
         {
@@ -25,6 +24,7 @@ public class Client
             {
                 _clientSocket.Connect(IPAddress.Loopback, 100);
                 Debug.Log("Connected");
+                SendMessage("ClientConnected");
                 LoopConnect();
             }
             catch (SocketException)
@@ -44,11 +44,11 @@ public class Client
         {
             byte[] buffer = Encoding.ASCII.GetBytes(req);
             _clientSocket.Send(buffer);
+            message="";
         }
 
         public void GetMessage()
         {
-            Debug.Log("Second thread:" + Thread.CurrentThread.ManagedThreadId);
             byte[] receivedBuf = new byte[1024];
             while (true)
             {
@@ -56,11 +56,15 @@ public class Client
                 byte[] data = new byte[rec];
                 Array.Copy(receivedBuf, data, rec);
                 string mes=Encoding.ASCII.GetString(data);
-                Debug.Log(mes);
                 lock(message){
                 message=mes;
                 }
             }
+        }
+
+        public Socket GetClientSocket()
+        {
+            return _clientSocket;
         }
 
         public void Disconnect()

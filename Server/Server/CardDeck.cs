@@ -6,7 +6,7 @@ using System.Text;
 namespace Server
 {
     class CardDeck
-    {
+    { 
         List<string> cards=new List<string>();
         public void CreateDeck()
         {
@@ -18,6 +18,7 @@ namespace Server
                     cards.Add(i.ToString() + sym);
                 }
             }
+
         }
         public void Shuffle()
         {
@@ -45,10 +46,12 @@ namespace Server
             }
             return sb.ToString();
         }
-        public string Print13Cards()
+        public string Get13Cards()
         {
             List<string> strList = cards.Take(13).ToList();
+            Console.WriteLine("Before: "+DeckSize());
             cards.RemoveRange(0, 13);
+            Console.WriteLine("After: " + DeckSize());
             strList.Sort(new SortComparer());
             StringBuilder sb = new StringBuilder();
             for(int i=0;i<13;i++)
@@ -61,7 +64,10 @@ namespace Server
         {
             cards.Clear();
         }
-
+        public int DeckSize()
+        {
+            return cards.Count;
+        }
         class SortComparer : Comparer<string>
         {
             public override int Compare(string x, string y)

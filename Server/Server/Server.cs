@@ -50,12 +50,13 @@ namespace Server
                 Array.Copy(receivedBuf, data, rec);
                 string text = Encoding.ASCII.GetString(data);
                 Console.WriteLine("From " + socket.RemoteEndPoint + ": " + text);
-                controller.Reaction(text);
+                controller.Reaction(socket,text);
             }
         }
         public void SendMessage(Socket s, string req)
         {
             byte[] buffer = Encoding.ASCII.GetBytes(req);
+            Console.WriteLine("Sending: " + req);
             s.Send(buffer);
         }
         public void SendBroadcast(string req)
@@ -66,9 +67,14 @@ namespace Server
             s.Send(buffer);
         }
 
-        public List<Socket> getClients()
+        public List<Socket> GetClients()
         {
             return _clientSockets;
+        }
+
+        public int GetNumberOfClients()
+        {
+            return _clientSockets.Count;
         }
     }
 }
