@@ -9,7 +9,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{8201BAF4-D3BC-944B-4DD2-C30288D8A765}</ProjectGuid>
+    <ProjectGuid>{12F44184-A422-5F27-22E6-507969043F15}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -49,36 +49,38 @@
      <Compile Include="Assets\Scripts\CardValues.cs" />
      <Compile Include="Assets\Scripts\Client.cs" />
      <Compile Include="Assets\Scripts\Enemy.cs" />
+     <Compile Include="Assets\Scripts\Menu\ConnectButton.cs" />
+     <Compile Include="Assets\Scripts\Menu\TitleScript.cs" />
      <Compile Include="Assets\Scripts\Partner.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\QuitOption.cs" />
      <Compile Include="Assets\Scripts\SomethingToTest.cs" />
  <Reference Include="Unity.Timeline.Editor">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.VSCode.Editor">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro.Editor">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Timeline">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
  </Reference>
  <Reference Include="Unity.CollabProxy.Editor">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.Rider.Editor">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
  </Reference>
  <Reference Include="Unity.TextMeshPro">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.UI">
- <HintPath>C:/Users/Patryk/Desktop/Inż/Nowy folder (3)/tcp-udp-networking-tutorial-part4/Brydż/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+ <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine">
  <HintPath>C:/Program Files/Unity/Hub/Editor/2019.2.12f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

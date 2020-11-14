@@ -20,8 +20,10 @@ namespace Server
 
         public void SetupServer()
         {
-            Console.WriteLine("Setting up server...");
-            _serverSocket.Bind(new IPEndPoint(IPAddress.Any, 100));
+            IPAddress ip = IPAddress.Any;
+            Console.WriteLine($"Setting up server {ip.ToString()}");
+            _serverSocket.Bind(new IPEndPoint(ip, 100));
+            //_serverSocket.Bind(new IPEndPoint(IPAddress.Parse("25.97.182.10"), 100));
             _serverSocket.Listen(1);
             Thread acceptThread = new Thread(AcceptLoop);
             acceptThread.Start();
@@ -33,7 +35,6 @@ namespace Server
                 Socket socket = _serverSocket.Accept();
                 Console.WriteLine("Connected: " + socket.RemoteEndPoint);
                 _clientSockets.Add(socket);
-                //SendMessage(socket, "Congratulation, you are in the network");
                 Console.WriteLine("Client connected");
                 Thread receiveThread = new Thread(() => ReceiveLoop(socket));
                 receiveThread.Start();
@@ -56,12 +57,12 @@ namespace Server
         public void SendMessage(Socket s, string req)
         {
             byte[] buffer = Encoding.ASCII.GetBytes(req);
-            Console.WriteLine("Sending: " + req);
+            Console.WriteLine("Sending to "+s.RemoteEndPoint.ToString()+": " + req);
             s.Send(buffer);
         }
         public void SendBroadcast(string req)
         {
-            Console.WriteLine("To send: "+ req);
+            Console.WriteLine("Send Broadcast: "+ req);
             byte[] buffer = Encoding.ASCII.GetBytes(req);
             foreach(Socket s in _clientSockets)
             s.Send(buffer);

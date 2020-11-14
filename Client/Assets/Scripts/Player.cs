@@ -11,10 +11,13 @@ public class Player : MonoBehaviour
 {
     public Client client;
     public GameObject card;
+    public Text messageForPlayer;
     private List<GameObject> cards=new List<GameObject>();
+    private Queue<Action> requestQueue = new Queue<Action>();
 
     void Start()
     {
+        Debug.Log(ConnectButton.ip);
         Screen.SetResolution(620,454,false);
         client=new Client(this);
         client.SetupClient();
@@ -40,33 +43,41 @@ public class Player : MonoBehaviour
         }  
     void Update()
     {
-        if(client.message!="") 
+        if(requestQueue.Count!=0)
         {
-            Debug.Log("Od gracza: " + client.message);
-            Reaction(client.GetClientSocket(),client.message);
+            requestQueue.Dequeue().Invoke();
         }
     }
 
-    void Reaction(Socket socket, string message)
+    public void AddRequest(Action action)
+    {
+        requestQueue.Enqueue(action);
+    }
+
+    public void Reaction(Socket socket, string message)
     {
             if(message.IndexOf("Cards")!=-1)
             {
                 string cardsString=message.Substring(message.IndexOf(':')+1);
                 GiveCards(cardsString);
-                Debug.Log("Cards Acquired");
+                SetMessageForPlayer("Cards received");
                 client.SendMessage("CardsAcquired");
             }
             else if(message=="masakra")
             {
                 Debug.Log("You crazy son of a bitch, you did it!");
             }
-            client.message="";
     }
 
-    void OnApplicationQuit()
+    public void OnApplicationQuit()
     {
         client.Disconnect();
-        Environment.Exit(Environment.ExitCode);
+    }
+
+    public void SetMessageForPlayer(string message)
+    {
+        Debug.Log(message);
+        messageForPlayer.text=message;
     }
 }
 

@@ -10,6 +10,7 @@ namespace Server
     {
         CardDeck cd;
         Server server;
+        AuctionPhase auctionPhase;
         public Mutex mutex = new Mutex();
         int temp = 0;
 
@@ -26,20 +27,16 @@ namespace Server
 
             server.SetupServer();
             Console.ReadLine();
-            for(int i=0;i<4;i++)
-            {
-                //server.SendMessage(server.GetClients()[i], cd.Get13Cards());
-            }
             Console.ReadLine();
         }
 
         public void Reaction(Socket socket, string message)
         {
-            Console.WriteLine("From " + socket.RemoteEndPoint.ToString() + ": " + message);
             mutex.WaitOne();
             Console.WriteLine("Reakcja");
             if(message=="ClientConnected")
             {
+                server.SendBroadcast("NewPlayerJoined");
                 if(server.GetNumberOfClients()==4)
                 {
                     Console.WriteLine("4 players ready. Sending cards");
@@ -54,8 +51,10 @@ namespace Server
             else if (message == "CardsAcquired")
             {
                 temp++;
-                if (temp == 4) server.SendBroadcast("masakra");
-                //starting the game
+                if (temp == 4)
+                {
+                    server.SendBroadcast("AuctionPhase");
+                }
             }
             mutex.ReleaseMutex();
 
@@ -65,7 +64,6 @@ namespace Server
         {
             foreach (Socket s in server.GetClients())
             {
-                Console.WriteLine("Sending cards to: " + s.RemoteEndPoint.ToString());
                 server.SendMessage(s, "Cards:" + cd.Get13Cards());
             }
         }

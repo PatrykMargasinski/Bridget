@@ -11,30 +11,42 @@ public class Client
 {
     private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     private Player player;
-    public string message="";
     // Start is called before the first frame update
         public Client(Player pl)
         {
-            Debug.Log("First thread:" + Thread.CurrentThread.ManagedThreadId);
             player=pl;
         }
+
         public void SetupClient()
         {
-            try
+            Thread thread=new Thread(LoopConnect);
+            thread.Start();
+        }
+        public void LoopConnect()
+        {
+            bool connected=false;
+            int attempts=1;
+            while(connected==false)
             {
-                _clientSocket.Connect(IPAddress.Loopback, 100);
-                Debug.Log("Connected");
-                SendMessage("ClientConnected");
-                LoopConnect();
+                player.AddRequest(new Action(()=>player.SetMessageForPlayer($"Connection attempt: {attempts}")));
+                try
+                {
+                    _clientSocket.Connect(IPAddress.Parse("127.0.0.1"), 100);
+                    //_clientSocket.Connect(IPAddress.Parse("25.97.182.10"), 100);
+                    player.AddRequest(new Action(()=>player.SetMessageForPlayer("Connected. Waiting for other players")));
+                    SendMessage("ClientConnected");
+                    connected=true;
+                    LoopGetMessage();
+                }
+                catch (SocketException)
+                {
+                    attempts++;
+                    Thread.Sleep(1000);
+                }
             }
-            catch (SocketException)
-            {
-                Debug.Log("Failed");
-            }
-
         }
 
-        private void LoopConnect()
+        private void LoopGetMessage()
         {
             Thread thread = new Thread(GetMessage);
             thread.Start();
@@ -44,29 +56,26 @@ public class Client
         {
             byte[] buffer = Encoding.ASCII.GetBytes(req);
             _clientSocket.Send(buffer);
-            message="";
         }
 
         public void GetMessage()
         {
             byte[] receivedBuf = new byte[1024];
-            while (true)
-            {
-                int rec = _clientSocket.Receive(receivedBuf);
-                byte[] data = new byte[rec];
-                Array.Copy(receivedBuf, data, rec);
-                string mes=Encoding.ASCII.GetString(data);
-                lock(message){
-                message=mes;
+            try{
+                while (true)
+                {
+                    int rec = _clientSocket.Receive(receivedBuf);
+                    byte[] data = new byte[rec];
+                    Array.Copy(receivedBuf, data, rec);
+                    string mes=Encoding.ASCII.GetString(data);
+                    player.AddRequest(new Action(()=>player.Reaction(_clientSocket,mes)));
                 }
             }
+            catch(SocketException)
+            {
+                player.AddRequest(new Action(()=>player.SetMessageForPlayer("Connection problem")));
+            }
         }
-
-        public Socket GetClientSocket()
-        {
-            return _clientSocket;
-        }
-
         public void Disconnect()
         {
             Debug.Log("Disconnect");
