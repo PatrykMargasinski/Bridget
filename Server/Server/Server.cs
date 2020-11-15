@@ -21,7 +21,7 @@ namespace Server
         public void SetupServer()
         {
             IPAddress ip = IPAddress.Any;
-            Console.WriteLine($"Setting up server {ip.ToString()}");
+            Console.WriteLine($"Setting up server {ip}");
             _serverSocket.Bind(new IPEndPoint(ip, 100));
             //_serverSocket.Bind(new IPEndPoint(IPAddress.Parse("25.97.182.10"), 100));
             _serverSocket.Listen(1);

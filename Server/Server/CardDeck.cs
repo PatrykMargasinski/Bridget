@@ -49,9 +49,7 @@ namespace Server
         public string Get13Cards()
         {
             List<string> strList = cards.Take(13).ToList();
-            Console.WriteLine("Before: "+DeckSize());
             cards.RemoveRange(0, 13);
-            Console.WriteLine("After: " + DeckSize());
             strList.Sort(new SortComparer());
             StringBuilder sb = new StringBuilder();
             for(int i=0;i<13;i++)

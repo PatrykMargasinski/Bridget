@@ -10,7 +10,6 @@ namespace Server
     {
         CardDeck cd;
         Server server;
-        AuctionPhase auctionPhase;
         public Mutex mutex = new Mutex();
         int temp = 0;
 
@@ -53,11 +52,10 @@ namespace Server
                 temp++;
                 if (temp == 4)
                 {
-                    server.SendBroadcast("AuctionPhase");
+                    server.SendBroadcast("masakra");
                 }
             }
             mutex.ReleaseMutex();
-
         }
 
         public void SendCards()

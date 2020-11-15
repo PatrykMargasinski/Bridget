@@ -10,11 +10,11 @@ using UnityEngine;
 public class Client
 {
     private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-    private Player player;
+    private Controller controller;
     // Start is called before the first frame update
-        public Client(Player pl)
+        public Client(Controller con)
         {
-            player=pl;
+            controller=con;
         }
 
         public void SetupClient()
@@ -28,12 +28,12 @@ public class Client
             int attempts=1;
             while(connected==false)
             {
-                player.AddRequest(new Action(()=>player.SetMessageForPlayer($"Connection attempt: {attempts}")));
+                controller.AddRequest(new Action(()=>controller.SetMessageForPlayer($"Connection attempt: {attempts}")));
                 try
                 {
                     _clientSocket.Connect(IPAddress.Parse("127.0.0.1"), 100);
                     //_clientSocket.Connect(IPAddress.Parse("25.97.182.10"), 100);
-                    player.AddRequest(new Action(()=>player.SetMessageForPlayer("Connected. Waiting for other players")));
+                    controller.AddRequest(new Action(()=>controller.SetMessageForPlayer("Connected. Waiting for other players")));
                     SendMessage("ClientConnected");
                     connected=true;
                     LoopGetMessage();
@@ -68,12 +68,12 @@ public class Client
                     byte[] data = new byte[rec];
                     Array.Copy(receivedBuf, data, rec);
                     string mes=Encoding.ASCII.GetString(data);
-                    player.AddRequest(new Action(()=>player.Reaction(_clientSocket,mes)));
+                    controller.AddRequest(new Action(()=>controller.Reaction(_clientSocket,mes)));
                 }
             }
             catch(SocketException)
             {
-                player.AddRequest(new Action(()=>player.SetMessageForPlayer("Connection problem")));
+                controller.AddRequest(new Action(()=>controller.SetMessageForPlayer("Connection problem")));
             }
         }
         public void Disconnect()
