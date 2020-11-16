@@ -53,7 +53,6 @@
      <Compile Include="Assets\Scripts\Menu\TitleScript.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\QuitOption.cs" />
-     <Compile Include="Assets\Scripts\SomethingToTest.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>C:/Users/Patryk/Documents/Bridget/Client/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

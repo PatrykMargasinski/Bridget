@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Net.Sockets;
+using System.Linq;
 
 public class Controller : MonoBehaviour
 {
@@ -45,10 +46,10 @@ public class Controller : MonoBehaviour
 
     public void Reaction(Socket socket, string message)
     {
-            if(message.IndexOf("Cards")!=-1)
+        string[] mes=message.Split(':');
+            if(mes[0]=="Cards")
             {
-                string cardsString=message.Substring(message.IndexOf(':')+1);
-                player[0].GiveCards(cardsString);
+                player[0].GiveCards(mes.Skip(1).ToArray());
                 for(int i=1;i<4;i++)
                 {
                     for(int j=0;j<13;j++)player[i].AddCard("back");
@@ -56,7 +57,12 @@ public class Controller : MonoBehaviour
                 SetMessageForPlayer("Cards acquired");
                 client.SendMessage("CardsAcquired");
             }
-            else if(message=="masakra")
+            else if(mes[0]=="NewPlayerJoined")
+            {
+                if(mes[1]!=ConnectButton.nick) SetMessageForPlayer($"{mes[1]} joined the game");
+                else SetMessageForPlayer($"Congratulation {ConnectButton.nick}, you joined the game");
+            }
+            else if(mes[0]=="Bidding")
             {
                 Debug.Log("You crazy son of a bitch, you did it!");
             }

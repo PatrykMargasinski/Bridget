@@ -34,7 +34,7 @@ public class Client
                     _clientSocket.Connect(IPAddress.Parse("127.0.0.1"), 100);
                     //_clientSocket.Connect(IPAddress.Parse("25.97.182.10"), 100);
                     controller.AddRequest(new Action(()=>controller.SetMessageForPlayer("Connected. Waiting for other players")));
-                    SendMessage("ClientConnected");
+                    SendMessage("ClientConnected:"+ConnectButton.nick);
                     connected=true;
                     LoopGetMessage();
                 }

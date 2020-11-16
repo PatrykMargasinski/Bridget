@@ -54,7 +54,7 @@ namespace Server
             StringBuilder sb = new StringBuilder();
             for(int i=0;i<13;i++)
             {
-                sb.Append(strList[i]);
+                sb.Append(":"+strList[i]);
             }
             return sb.ToString();
         }

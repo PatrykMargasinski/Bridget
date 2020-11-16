@@ -11,9 +11,7 @@ public class Player : MonoBehaviour
 {
     public GameObject card;
     private List<GameObject> cards=new List<GameObject>();
-
     private Quaternion quaternion;
-
     public Player()
     {
         quaternion=Quaternion.identity;
@@ -30,18 +28,11 @@ public class Player : MonoBehaviour
 
     }
 
-        public void GiveCards(string s)
+        public void GiveCards(string[] cards)
         {
-            int first = 0;
-            for(int i=0;i<s.Length;i++)
+            foreach(string card in cards)
             {
-                if(Char.IsLetter(s[i]))
-                {
-                    string str=s.Substring(first, i - first+1);
-                    Debug.Log("Od give cards: "+ str);
-                    AddCard(str);
-                    first = i+1;
-                }
+                AddCard(card);
             }
         } 
         
@@ -50,8 +41,7 @@ public class Player : MonoBehaviour
             GameObject temp = Instantiate(card,new Vector3(0,0,0),quaternion);
             temp.transform.SetParent(this.gameObject.transform);
             temp.gameObject.GetComponent<Image>().sprite = CardSprites.sprites[str];
-            if(str!="back")
-            temp.GetComponent<CardValues>().setValues(str);
+            if(str!="back") temp.GetComponent<CardValues>().setValues(str);
             cards.Add(temp);
         }
 }

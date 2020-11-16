@@ -7,10 +7,13 @@ using UnityEngine.UI;
 public class ConnectButton : MonoBehaviour
 {
     public static string ip="Hej";
-    public InputField inputField;
+    public static string nick="";
+    public InputField inputFieldForIP;
+    public InputField inputFieldForNick;
     public void Connection()
     {
-        ip=inputField.text;
+        ip=inputFieldForIP.text;
+        nick=inputFieldForNick.text;
         SceneManager.LoadScene("GameScene");
     }
     public void Exit()
