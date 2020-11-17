@@ -11,7 +11,7 @@ public class Client
 {
     private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     private Controller controller;
-    // Start is called before the first frame update
+
         public Client(Controller con)
         {
             controller=con;
@@ -41,7 +41,6 @@ public class Client
                 catch (SocketException)
                 {
                     attempts++;
-                    Thread.Sleep(1000);
                 }
             }
         }

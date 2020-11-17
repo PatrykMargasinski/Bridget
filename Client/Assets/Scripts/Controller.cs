@@ -10,12 +10,12 @@ public class Controller : MonoBehaviour
 {
     public Client client;
     public Text messageForPlayer;
-    public Player[] player;
+    public Player[] players;
     private Queue<Action> requestQueue = new Queue<Action>();
 
     void Start()
     {
-        player=new Player[4];
+        players=new Player[4];
         SetPlayers();
         Screen.SetResolution(620,454,false);
         client=new Client(this);
@@ -31,12 +31,12 @@ public class Controller : MonoBehaviour
 
     private void SetPlayers()
     {
-        player[0]=GameObject.Find("MyCards").GetComponent<Player>();
-        player[1]=GameObject.Find("EnemyBoard2").GetComponent<Player>();
-        player[1].SetAngle(1);
-        player[2]=GameObject.Find("PartnerCards").GetComponent<Player>();
-        player[3]=GameObject.Find("EnemyBoard1").GetComponent<Player>();
-        player[3].SetAngle(2);
+        players[0]=GameObject.Find("MyCards").GetComponent<Player>();
+        players[1]=GameObject.Find("EnemyBoard2").GetComponent<Player>();
+        players[1].SetAngle(1);
+        players[2]=GameObject.Find("PartnerCards").GetComponent<Player>();
+        players[3]=GameObject.Find("EnemyBoard1").GetComponent<Player>();
+        players[3].SetAngle(2);
     }
 
     public void AddRequest(Action action)
@@ -49,10 +49,10 @@ public class Controller : MonoBehaviour
         string[] mes=message.Split(':');
             if(mes[0]=="Cards")
             {
-                player[0].GiveCards(mes.Skip(1).ToArray());
+                players[0].GiveCards(mes.Skip(1).ToArray());
                 for(int i=1;i<4;i++)
                 {
-                    for(int j=0;j<13;j++)player[i].AddCard("back");
+                    for(int j=0;j<13;j++)players[i].AddCard("back");
                 }
                 SetMessageForPlayer("Cards acquired");
                 client.SendMessage("CardsAcquired");
@@ -61,6 +61,18 @@ public class Controller : MonoBehaviour
             {
                 if(mes[1]!=ConnectButton.nick) SetMessageForPlayer($"{mes[1]} joined the game");
                 else SetMessageForPlayer($"Congratulation {ConnectButton.nick}, you joined the game");
+            }
+            else if(mes[0]=="Players")
+            {
+                int index=1;
+                while(mes[index]!=ConnectButton.nick) index+=2;
+                for(int i=0;i<4;i++)
+                {
+                    if(index>8)index=1;
+                    players[i].SetNickAndPosition(mes[index],mes[index+1][0]);
+                    index+=2;
+                }
+
             }
             else if(mes[0]=="Bidding")
             {

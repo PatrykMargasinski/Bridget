@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading;
-using System.Net;
-using System.Net.Sockets;
 
 public class Player : MonoBehaviour
 {
     public GameObject card;
+    public Text playerText;
+    public string nick;
+    public char position;
     private List<GameObject> cards=new List<GameObject>();
     private Quaternion quaternion;
     public Player()
@@ -23,9 +24,12 @@ public class Player : MonoBehaviour
         else if(option==2) quaternion=Quaternion.AngleAxis(90,Vector3.forward);
     }
 
-    void Start()
+    public void SetNickAndPosition(string n, char pos)
     {
-
+        nick=n;
+        position=pos;
+        playerText.text=nick;
+        playerText.text=this.ToString();
     }
 
         public void GiveCards(string[] cards)
@@ -44,5 +48,9 @@ public class Player : MonoBehaviour
             if(str!="back") temp.GetComponent<CardValues>().setValues(str);
             cards.Add(temp);
         }
+    public override string ToString()
+    {
+        return $"{nick} - {position}";
+    }
 }
 

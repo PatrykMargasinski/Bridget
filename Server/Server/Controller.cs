@@ -36,7 +36,7 @@ namespace Server
             if(mes[0]=="ClientConnected")
             {
                 Player newPlayer = new Player(mes[1]);
-                players.Add(new Player(mes[1]));
+                players.Add(newPlayer);
                 server.SendBroadcast("NewPlayerJoined:"+newPlayer.nick);
                 if(server.GetNumberOfClients()==4)
                 {
@@ -54,6 +54,7 @@ namespace Server
                 temp++;
                 if (temp == 4)
                 {
+                    SendPlayersNicksAndPositions();
                     server.SendBroadcast("Bidding");
                 }
             }
@@ -66,6 +67,18 @@ namespace Server
             {
                 server.SendMessage(s, "Cards" + cd.Get13Cards());
             }
+        }
+
+        public void SendPlayersNicksAndPositions()
+        {
+            StringBuilder mes = new StringBuilder("Players");
+            foreach(Player p in players)
+            {
+                mes.Append($":{p.nick}:{p.position}");
+            }
+            Console.WriteLine(mes.ToString());
+            server.SendBroadcast(mes.ToString());
+
         }
     }
 }
