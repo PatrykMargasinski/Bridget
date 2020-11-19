@@ -78,6 +78,6 @@ public class Client
         public void Disconnect()
         {
             Debug.Log("Disconnect");
-            _clientSocket.Disconnect(false);
+            if(_clientSocket.Connected)_clientSocket.Disconnect(false);
         }
 }

@@ -8,16 +8,27 @@ using System.Linq;
 
 public class Controller : MonoBehaviour
 {
+    //Main
     public Client client;
     public Text messageForPlayer;
     public Player[] players;
     private Queue<Action> requestQueue = new Queue<Action>();
 
+    //Auction phase
+    public Image auctionPhaseScreen;
+    public int highestNumber;
+    public TrumpColor highestColor;
+    public int bidNumber=0;
+    public TrumpColor bidColor=TrumpColor.undefined;
+    public Button[] numberButtons;
+    public Button[] colorButtons;
+    public Button[] actionButtons;
     void Start()
     {
         players=new Player[4];
         SetPlayers();
         Screen.SetResolution(620,454,false);
+        auctionPhaseScreen.gameObject.SetActive(false);
         client=new Client(this);
         client.SetupClient();
     } 
@@ -76,7 +87,19 @@ public class Controller : MonoBehaviour
             }
             else if(mes[0]=="Bidding")
             {
-                Debug.Log("You crazy son of a bitch, you did it!");
+                Debug.Log(mes);
+                highestNumber=Int32.Parse(mes[2]);
+                highestColor=(TrumpColor)Enum.Parse(typeof(TrumpColor),mes[3]);
+                BidNumberInitialization();
+                if(mes[1][0]!=players[0].position)
+                {
+                    SetMessageForPlayer($"It's {mes[1]}'s turn. Highest bid is {highestNumber}{highestColor.ToString()}");
+                }
+                else
+                {
+                    SetMessageForPlayer($"It's your turn. Highest bid is {highestNumber}{highestColor.ToString()}");
+                    auctionPhaseScreen.gameObject.SetActive(true);
+                }
             }
     }
 
@@ -89,5 +112,30 @@ public class Controller : MonoBehaviour
     {
         Debug.Log(message);
         messageForPlayer.text=message;
+    }
+
+    public void BidNumberInitialization()
+    {
+        for(int i=0;i<highestNumber-1;i++)
+        {
+            numberButtons[i].interactable=false;
+        }
+        if(highestColor==TrumpColor.BA) numberButtons[highestNumber].interactable=false;
+    }
+    public void BidColorInitialization()
+    {
+        if(bidColor!=TrumpColor.BA)
+        {
+            
+        }
+    }
+    public void BidNumberClicked(int number)
+    {
+        
+    }
+    public void BidColorClicked(int color)
+    {
+        bidColor=(TrumpColor)color;
+        numberButtons[0].interactable=false;
     }
 }

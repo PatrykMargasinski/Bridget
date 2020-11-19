@@ -9,16 +9,17 @@ namespace Server
         private int currentPlayer;
         char[] players = new char[] { 'S', 'E', 'N', 'W' };
 
-        string bid = "0BA";
+        string bid = "0:BA";
         public AuctionPhase(char firstPlayer)
         {
             int index = 0;
             while (players[index] != firstPlayer) index++;
-            currentPlayer = index;
+            currentPlayer = index-1;
         }
         public char GetCurrent()
         {
-            return players[currentPlayer++];
+            currentPlayer = (currentPlayer + 1) % 2;
+            return players[currentPlayer];
         }
     }
 }

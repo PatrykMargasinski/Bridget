@@ -12,6 +12,7 @@ namespace Server
         Server server;
         public Mutex mutex = new Mutex();
         List<Player> players = new List<Player>();
+        AuctionPhase auctionPhase;
         int temp = 0;
 
         public Controller()
@@ -55,7 +56,8 @@ namespace Server
                 if (temp == 4)
                 {
                     SendPlayersNicksAndPositions();
-                    server.SendBroadcast("Bidding");
+                    auctionPhase = new AuctionPhase('N');
+                    server.SendBroadcast("Bidding:N:3:H");
                 }
             }
             mutex.ReleaseMutex();
