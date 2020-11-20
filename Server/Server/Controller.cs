@@ -57,7 +57,31 @@ namespace Server
                 {
                     SendPlayersNicksAndPositions();
                     auctionPhase = new AuctionPhase('N');
-                    server.SendBroadcast("Bidding:N:3:H");
+                    server.SendBroadcast("Bidding:N:1:BA");
+                }
+            }
+            else if (mes[0] == "Bid")
+            {
+                if(mes[2]=="Pass")
+                {
+                    auctionPhase.passCounter++;
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+                }
+                else if(mes[2]=="Counter")
+                {
+                    auctionPhase.passCounter = 0;
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+                }
+                else if(mes[2]=="Recounter")
+                {
+                    auctionPhase.passCounter = 0;
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+                }
+                else{
+                    auctionPhase.passCounter = 0;
+                    auctionPhase.bid = mes[3] + ":" + mes[4];
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+
                 }
             }
             mutex.ReleaseMutex();

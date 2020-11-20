@@ -8,8 +8,9 @@ namespace Server
     {
         private int currentPlayer;
         char[] players = new char[] { 'S', 'E', 'N', 'W' };
+        public int passCounter = 0;
 
-        string bid = "0:BA";
+        public string bid = "0:BA";
         public AuctionPhase(char firstPlayer)
         {
             int index = 0;
