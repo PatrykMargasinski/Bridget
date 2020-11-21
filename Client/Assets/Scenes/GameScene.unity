@@ -205,8 +205,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidColorClicked
         m_Mode: 3
         m_Arguments:
@@ -337,8 +337,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidNumberClicked
         m_Mode: 3
         m_Arguments:
@@ -469,8 +469,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidActions
         m_Mode: 5
         m_Arguments:
@@ -680,8 +680,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidNumberClicked
         m_Mode: 3
         m_Arguments:
@@ -887,8 +887,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidColorClicked
         m_Mode: 3
         m_Arguments:
@@ -1123,8 +1123,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidActions
         m_Mode: 5
         m_Arguments:
@@ -1255,8 +1255,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidNumberClicked
         m_Mode: 3
         m_Arguments:
@@ -1624,8 +1624,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidColorClicked
         m_Mode: 3
         m_Arguments:
@@ -1756,8 +1756,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidNumberClicked
         m_Mode: 3
         m_Arguments:
@@ -1888,8 +1888,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidActions
         m_Mode: 5
         m_Arguments:
@@ -2190,8 +2190,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidActions
         m_Mode: 5
         m_Arguments:
@@ -2322,8 +2322,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidNumberClicked
         m_Mode: 3
         m_Arguments:
@@ -2775,8 +2775,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidColorClicked
         m_Mode: 3
         m_Arguments:
@@ -3592,8 +3592,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidNumberClicked
         m_Mode: 3
         m_Arguments:
@@ -4103,8 +4103,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidNumberClicked
         m_Mode: 3
         m_Arguments:
@@ -4611,8 +4611,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2095197357}
-        m_TargetAssemblyTypeName: Controller, Assembly-CSharp
+      - m_Target: {fileID: 2095197359}
+        m_TargetAssemblyTypeName: AuctionPhase, Assembly-CSharp
         m_MethodName: BidColorClicked
         m_Mode: 3
         m_Arguments:
@@ -4842,6 +4842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2095197358}
   - component: {fileID: 2095197357}
+  - component: {fileID: 2095197359}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -4863,6 +4864,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   messageForPlayer: {fileID: 138218899}
   players: []
+--- !u!4 &2095197358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095197356}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 322.75836, y: 236.35065, z: -605.3326}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2095197359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095197356}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436e4692b983ef04fb5da507ec2a7686, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   auctionPhaseScreen: {fileID: 611122591}
   highestNumber: 0
   highestColor: 0
@@ -4887,20 +4914,6 @@ MonoBehaviour:
   - {fileID: 498055765}
   - {fileID: 109515820}
   - {fileID: 352276159}
---- !u!4 &2095197358
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095197356}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 322.75836, y: 236.35065, z: -605.3326}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2105844946
 GameObject:
   m_ObjectHideFlags: 0

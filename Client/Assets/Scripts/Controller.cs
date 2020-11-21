@@ -13,22 +13,13 @@ public class Controller : MonoBehaviour
     public Text messageForPlayer;
     public Player[] players;
     private Queue<Action> requestQueue = new Queue<Action>();
+    private AuctionPhase auctionPhase;
 
-    //Auction phase
-    public Image auctionPhaseScreen;
-    public int highestNumber;
-    public TrumpColor highestColor;
-    public int bidNumber=0;
-    public TrumpColor bidColor=TrumpColor.undefined;
-    public Button[] numberButtons;
-    public Button[] colorButtons;
-    public Button[] actionButtons;
     void Start()
     {
         players=new Player[4];
         SetPlayers();
         Screen.SetResolution(620,454,false);
-        auctionPhaseScreen.gameObject.SetActive(false);
         client=new Client(this);
         client.SetupClient();
     } 
@@ -88,19 +79,18 @@ public class Controller : MonoBehaviour
             else if(mes[0]=="Bidding")
             {
                 Debug.Log(mes);
-                highestNumber=Int32.Parse(mes[2]);
-                highestColor=(TrumpColor)Enum.Parse(typeof(TrumpColor),mes[3]);
-                BidNumberInitialization();
-                BidColorInitialization();
-                BidActionInitialization();
+                auctionPhase=gameObject.GetComponent<AuctionPhase>();
+                auctionPhase.highestNumber=Int32.Parse(mes[2]);
+                auctionPhase.highestColor=(TrumpColor)Enum.Parse(typeof(TrumpColor),mes[3]);
+                auctionPhase.Initialization();
                 if(mes[1][0]!=players[0].position)
                 {
-                    SetMessageForPlayer($"It's {mes[1]}'s turn. Highest bid is {highestNumber}{highestColor.ToString()}");
+                    SetMessageForPlayer($"It's {mes[1]}'s turn. Highest bid is {auctionPhase.highestNumber}{auctionPhase.highestColor.ToString()}");
                 }
                 else
                 {
-                    SetMessageForPlayer($"It's your turn. Highest bid is {highestNumber}{highestColor.ToString()}");
-                    auctionPhaseScreen.gameObject.SetActive(true);
+                    SetMessageForPlayer($"It's your turn. Highest bid is {auctionPhase.highestNumber}{auctionPhase.highestColor.ToString()}");
+                    auctionPhase.auctionPhaseScreen.gameObject.SetActive(true);
                 }
             }
             else if(mes[0]=="Game")
@@ -118,103 +108,6 @@ public class Controller : MonoBehaviour
     {
         Debug.Log(message);
         messageForPlayer.text=message;
-    }
-
-    public void BidNumberInitialization()
-    {
-        foreach(Button b in numberButtons) {b.interactable=true;SetWhite(b);}
-        for(int i=0;i<highestNumber-1;i++)
-        {
-            numberButtons[i].interactable=false;
-        }
-        if(highestColor==TrumpColor.BA) numberButtons[highestNumber-1].interactable=false;
-
-    }
-    public void BidColorInitialization()
-    {
-        foreach(Button b in colorButtons) {b.interactable=true;SetWhite(b);}
-        if(highestColor!=TrumpColor.BA)
-        {
-            for(int i=0;i<=(int)highestColor;i++)
-            {
-                colorButtons[i].interactable=false;
-            }
-        }
-    }
-    public void BidActionInitialization()
-    {
-        foreach(Button b in actionButtons) {b.interactable=false;}
-    }
-
-    public void BidNumberClicked(int number)
-    {
-        Debug.Log("Numer: "+number +" BidNumber:" + bidNumber);
-        if(bidNumber!=0) SetWhite(numberButtons[bidNumber-1]);
-        SetRed(numberButtons[number-1]);
-        bidNumber=number;
-        Debug.Log("Bid number: "+bidNumber);
-        if(bidNumber!=0 && bidColor != TrumpColor.undefined)
-        {
-            actionButtons[3].interactable=true;
-        }
-        foreach(Button b in colorButtons) b.interactable=true;
-        if(bidNumber==highestNumber)
-        {
-            for(int i=0;i<=(int)highestColor;i++)colorButtons[i].interactable=false;
-            if(bidColor<=highestColor){bidColor=TrumpColor.undefined;SetWhite(colorButtons[(int)bidColor]);actionButtons[3].interactable=false;}
-        }
-
-    }
-    public void BidColorClicked(int color)
-    {
-        if(bidColor!=TrumpColor.undefined) SetWhite(colorButtons[(int)bidColor]);
-        SetRed(colorButtons[color]);
-        bidColor=(TrumpColor)color;
-        Debug.Log("Bid color: "+bidColor.ToString());
-        if(bidNumber!=0 && bidColor != TrumpColor.undefined)
-        {
-            actionButtons[3].interactable=true;
-        }
-    }
-
-    public void BidActions(string action)
-    {
-        switch(action)
-        {
-            case "Pass":
-                client.SendMessage($"Bid:{players[0].position}:Pass");
-            break;
-
-            case "Counter":
-                client.SendMessage($"Bid:{players[0].position}:Counter");
-            break;
-
-            case "Recounter":
-                client.SendMessage($"Bid:{players[0].position}:Recounter");
-            break;
-
-            case "Bid":
-                client.SendMessage($"Bid:{players[0].position}:Bid:{bidNumber}:{bidColor.ToString()}");
-            break;
-        }
-        auctionPhaseScreen.gameObject.SetActive(false);
-    }
-
-    public void SetRed(Button b)
-    {
-        var colors=b.colors;
-        colors.normalColor=Color.red;
-        colors.pressedColor=Color.red;
-        colors.selectedColor=Color.red;
-        b.colors=colors;
-    }
-    public void SetWhite(Button b)
-    {
-        var colors=b.colors;
-        colors.normalColor=Color.white;
-        colors.pressedColor=Color.white;
-        colors.selectedColor=Color.white;
-        b.colors=colors;
     }
 
 }

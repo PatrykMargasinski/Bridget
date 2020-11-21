@@ -82,7 +82,8 @@ namespace Server
                     auctionPhase.passCount = 0;
                     server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
                 }
-                else{
+                else
+                {
                     auctionPhase.counter = '0';
                     auctionPhase.recounter = '0';
                     auctionPhase.passCount = 0;
