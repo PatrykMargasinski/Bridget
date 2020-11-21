@@ -103,6 +103,10 @@ public class Controller : MonoBehaviour
                     auctionPhaseScreen.gameObject.SetActive(true);
                 }
             }
+            else if(mes[0]=="Game")
+            {
+                SetMessageForPlayer("Normal game starts");
+            }
     }
 
     public void OnApplicationQuit()
@@ -152,6 +156,12 @@ public class Controller : MonoBehaviour
         if(bidNumber!=0 && bidColor != TrumpColor.undefined)
         {
             actionButtons[3].interactable=true;
+        }
+        foreach(Button b in colorButtons) b.interactable=true;
+        if(bidNumber==highestNumber)
+        {
+            for(int i=0;i<=(int)highestColor;i++)colorButtons[i].interactable=false;
+            if(bidColor<=highestColor){bidColor=TrumpColor.undefined;SetWhite(colorButtons[(int)bidColor]);actionButtons[3].interactable=false;}
         }
 
     }

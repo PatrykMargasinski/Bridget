@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -64,24 +65,29 @@ namespace Server
             {
                 if(mes[2]=="Pass")
                 {
-                    auctionPhase.passCounter++;
-                    server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+                    auctionPhase.passCount++;
+                    if (auctionPhase.passCount < 3) server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+                    else if (auctionPhase.passCount == 3) server.SendBroadcast($"Game");
+                    else throw (new ArgumentException("Why are there 4 passes?"));
                 }
                 else if(mes[2]=="Counter")
                 {
-                    auctionPhase.passCounter = 0;
+                    auctionPhase.counter = auctionPhase.players[(3 + auctionPhase.players.ToList().IndexOf(mes[1][0]))%4];
+                    auctionPhase.passCount = 0;
                     server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
                 }
                 else if(mes[2]=="Recounter")
                 {
-                    auctionPhase.passCounter = 0;
+                    auctionPhase.recounter = auctionPhase.counter;
+                    auctionPhase.passCount = 0;
                     server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
                 }
                 else{
-                    auctionPhase.passCounter = 0;
+                    auctionPhase.counter = '0';
+                    auctionPhase.recounter = '0';
+                    auctionPhase.passCount = 0;
                     auctionPhase.bid = mes[3] + ":" + mes[4];
                     server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
-
                 }
             }
             mutex.ReleaseMutex();
@@ -98,13 +104,9 @@ namespace Server
         public void SendPlayersNicksAndPositions()
         {
             StringBuilder mes = new StringBuilder("Players");
-            foreach(Player p in players)
-            {
-                mes.Append($":{p.nick}:{p.position}");
-            }
+            foreach(Player p in players) mes.Append($":{p.nick}:{p.position}");
             Console.WriteLine(mes.ToString());
             server.SendBroadcast(mes.ToString());
-
         }
     }
 }

@@ -7,8 +7,10 @@ namespace Server
     class AuctionPhase
     {
         private int currentPlayer;
-        char[] players = new char[] { 'S', 'E', 'N', 'W' };
-        public int passCounter = 0;
+        public char[] players = new char[] { 'S', 'E', 'N', 'W' };
+        public int passCount = 0;
+        public char counter = '0';
+        public char recounter = '0';
 
         public string bid = "0:BA";
         public AuctionPhase(char firstPlayer)
