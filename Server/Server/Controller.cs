@@ -58,37 +58,52 @@ namespace Server
                 {
                     SendPlayersNicksAndPositions();
                     auctionPhase = new AuctionPhase('N');
-                    server.SendBroadcast("Bidding:N:1:BA");
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:1:BA:Auction phase started: ");
                 }
             }
-            else if (mes[0] == "Bid")
+            else if (mes[0] == "Bidding")
             {
                 if(mes[2]=="Pass")
                 {
                     auctionPhase.passCount++;
-                    if (auctionPhase.passCount < 3) server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
-                    else if (auctionPhase.passCount == 3) server.SendBroadcast($"Game");
+                    if (auctionPhase.passCount < 3) server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:{auctionPhase.bid}:{mes[1]}:passed");
+                    else if (auctionPhase.passCount == 3) 
+                    {
+                        StringBuilder mesForGame = new StringBuilder();
+                        mesForGame.Append($"Game starts with contract {auctionPhase.bid} for team {auctionPhase.GetCurrent()}{auctionPhase.GetPartner()}");
+                        if (auctionPhase.counter != '0' && auctionPhase.recounter == '0') mesForGame.Append(" with counter");
+                        else if (auctionPhase.counter != '0' && auctionPhase.recounter != '0') mesForGame.Append(" with recounter");
+                        mesForGame.Append("\nFirst player is "+auctionPhase.playerWithFirstColor);
+                        server.SendBroadcast(mesForGame.ToString());
+                    }
                     else throw (new ArgumentException("Why are there 4 passes?"));
                 }
                 else if(mes[2]=="Counter")
                 {
                     auctionPhase.counter = auctionPhase.players[(3 + auctionPhase.players.ToList().IndexOf(mes[1][0]))%4];
+                    Console.WriteLine("Counter:" + auctionPhase.counter);
                     auctionPhase.passCount = 0;
-                    server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:{auctionPhase.bid}:{mes[1]}:countered");
                 }
                 else if(mes[2]=="Recounter")
                 {
                     auctionPhase.recounter = auctionPhase.counter;
+                    Console.WriteLine("Recounter:" + auctionPhase.recounter);
                     auctionPhase.passCount = 0;
-                    server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:{auctionPhase.bid}:{mes[1]}:recountered");
                 }
                 else
                 {
                     auctionPhase.counter = '0';
                     auctionPhase.recounter = '0';
                     auctionPhase.passCount = 0;
+                    if (auctionPhase.firstColor != mes[4]) 
+                    {
+                        auctionPhase.firstColor = mes[4];
+                        auctionPhase.playerWithFirstColor = mes[1][0];
+                    }
                     auctionPhase.bid = mes[3] + ":" + mes[4];
-                    server.SendBroadcast($"Bidding:{auctionPhase.GetCurrent()}:{auctionPhase.bid}");
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:{auctionPhase.bid}:{mes[1]}:bid {mes[3]}{mes[4]}");
                 }
             }
             mutex.ReleaseMutex();

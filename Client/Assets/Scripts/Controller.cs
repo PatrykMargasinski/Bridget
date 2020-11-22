@@ -20,6 +20,7 @@ public class Controller : MonoBehaviour
         players=new Player[4];
         SetPlayers();
         Screen.SetResolution(620,454,false);
+        auctionPhase=gameObject.GetComponent<AuctionPhase>();
         client=new Client(this);
         client.SetupClient();
     } 
@@ -62,7 +63,7 @@ public class Controller : MonoBehaviour
             else if(mes[0]=="NewPlayerJoined")
             {
                 if(mes[1]!=ConnectButton.nick) SetMessageForPlayer($"{mes[1]} joined the game");
-                else SetMessageForPlayer($"Congratulation {ConnectButton.nick}, you joined the game");
+                else SetMessageForPlayer($"Congratulation {mes[1]}, you joined the game");
             }
             else if(mes[0]=="Players")
             {
@@ -78,24 +79,25 @@ public class Controller : MonoBehaviour
             }
             else if(mes[0]=="Bidding")
             {
-                Debug.Log(mes);
-                auctionPhase=gameObject.GetComponent<AuctionPhase>();
+                Debug.Log("Mes5"+mes[5]);
                 auctionPhase.highestNumber=Int32.Parse(mes[2]);
                 auctionPhase.highestColor=(TrumpColor)Enum.Parse(typeof(TrumpColor),mes[3]);
                 auctionPhase.Initialization();
                 if(mes[1][0]!=players[0].position)
                 {
-                    SetMessageForPlayer($"It's {mes[1]}'s turn. Highest bid is {auctionPhase.highestNumber}{auctionPhase.highestColor.ToString()}");
+                    SetMessageForPlayer($"It's {mes[1]}'s turn. Highest bid is {auctionPhase.highestNumber}{auctionPhase.highestColor.ToString()}\n{mes[4]} {mes[5]}");
                 }
                 else
                 {
-                    SetMessageForPlayer($"It's your turn. Highest bid is {auctionPhase.highestNumber}{auctionPhase.highestColor.ToString()}");
+                    SetMessageForPlayer($"It's your turn. Highest bid is {auctionPhase.highestNumber}{auctionPhase.highestColor.ToString()}\n{mes[4]} {mes[5]}");
+                    if(mes[5]=="countered") auctionPhase.actionButtons[1].interactable=true;
+                    if(mes[5].IndexOf("bid")!=-1) auctionPhase.actionButtons[0].interactable=true;
                     auctionPhase.auctionPhaseScreen.gameObject.SetActive(true);
                 }
             }
-            else if(mes[0]=="Game")
+            else if(mes[0].IndexOf("Game")!=-1)
             {
-                SetMessageForPlayer("Normal game starts");
+                SetMessageForPlayer(mes[0]+mes[1]);
             }
     }
 

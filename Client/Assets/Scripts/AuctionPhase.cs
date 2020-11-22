@@ -30,16 +30,18 @@ public class AuctionPhase : MonoBehaviour
 
     public void BidNumberInitialization()
     {
+        if(bidNumber!=0){SetWhite(numberButtons[bidNumber-1]);bidNumber=0;}
         foreach(Button b in numberButtons) {b.interactable=true;SetWhite(b);}
         for(int i=0;i<highestNumber-1;i++)
         {
             numberButtons[i].interactable=false;
         }
-        if(highestColor==TrumpColor.BA) numberButtons[highestNumber-1].interactable=false;
-
+        Debug.Log(highestColor.ToString()+" "+highestNumber);
+        if(highestColor==TrumpColor.BA && highestNumber!=0) numberButtons[highestNumber-1].interactable=false;
     }
     public void BidColorInitialization()
     {
+        if(bidColor!=TrumpColor.undefined){SetWhite(colorButtons[(int)bidColor]);bidColor=TrumpColor.undefined;}
         foreach(Button b in colorButtons) {b.interactable=true;SetWhite(b);}
         if(highestColor!=TrumpColor.BA)
         {
@@ -70,7 +72,14 @@ public class AuctionPhase : MonoBehaviour
         if(bidNumber==highestNumber)
         {
             for(int i=0;i<=(int)highestColor;i++)colorButtons[i].interactable=false;
-            if((int)bidColor<=(int)highestColor){bidColor=TrumpColor.undefined;SetWhite(colorButtons[(int)bidColor]);actionButtons[3].interactable=false;}
+            if(bidColor<=highestColor && bidColor!=TrumpColor.undefined)
+            {
+                SetWhite(colorButtons[(int)bidColor]);
+                Debug.Log("Size: "+actionButtons.Length);
+                actionButtons[3].interactable=false;
+
+                bidColor=TrumpColor.undefined;
+            }
         }
 
     }
@@ -91,19 +100,19 @@ public class AuctionPhase : MonoBehaviour
         switch(action)
         {
             case "Pass":
-                controller.client.SendMessage($"Bid:{controller.players[0].position}:Pass");
+                controller.client.SendMessage($"Bidding:{controller.players[0].position}:Pass");
             break;
 
             case "Counter":
-                controller.client.SendMessage($"Bid:{controller.players[0].position}:Counter");
+                controller.client.SendMessage($"Bidding:{controller.players[0].position}:Counter");
             break;
 
             case "Recounter":
-                controller.client.SendMessage($"Bid:{controller.players[0].position}:Recounter");
+                controller.client.SendMessage($"Bidding:{controller.players[0].position}:Recounter");
             break;
 
             case "Bid":
-                controller.client.SendMessage($"Bid:{controller.players[0].position}:Bid:{bidNumber}:{bidColor.ToString()}");
+                controller.client.SendMessage($"Bidding:{controller.players[0].position}:Bid:{bidNumber}:{bidColor.ToString()}");
             break;
         }
         auctionPhaseScreen.gameObject.SetActive(false);
