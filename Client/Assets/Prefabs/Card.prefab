@@ -62,6 +62,8 @@ MonoBehaviour:
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -87,7 +89,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8846e9df41b34941bb1c184e910f5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 
+  owner: {fileID: 0}
+  number: 0
+  symbol: 0
+  cardWithoutRaycast: {fileID: 4274603665842283539, guid: e0f7eefc5f7010e41a0aa2872d3d887d,
+    type: 3}
 --- !u!114 &-7818960053310900916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,6 +112,7 @@ MonoBehaviour:
       m_PersistentCalls:
         m_Calls:
         - m_Target: {fileID: 418445920571816914}
+          m_TargetAssemblyTypeName: 
           m_MethodName: testValue
           m_Mode: 1
           m_Arguments:

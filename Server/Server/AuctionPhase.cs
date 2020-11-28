@@ -37,5 +37,6 @@ namespace Server
         public char GetPartner()
         {
             return players[(2+currentPlayer)%4];
-        }}
+        }
+    }
 }

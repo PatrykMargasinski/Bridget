@@ -73,6 +73,7 @@ namespace Server
                         mesForGame.Append($"Game starts with contract {auctionPhase.bid} for team {auctionPhase.GetCurrent()}{auctionPhase.GetPartner()}");
                         if (auctionPhase.counter != '0' && auctionPhase.recounter == '0') mesForGame.Append(" with counter");
                         else if (auctionPhase.counter != '0' && auctionPhase.recounter != '0') mesForGame.Append(" with recounter");
+
                         mesForGame.Append("\nFirst player is "+auctionPhase.playerWithFirstColor);
                         server.SendBroadcast(mesForGame.ToString());
                     }

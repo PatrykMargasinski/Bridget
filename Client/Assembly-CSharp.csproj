@@ -37,16 +37,16 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Menu\ConnectButton.cs" />
-     <Compile Include="Assets\Scripts\TrumpColor.cs" />
-     <Compile Include="Assets\Scripts\CardSprites.cs" />
+     <Compile Include="Assets\Scripts\Game\TrumpColor.cs" />
+     <Compile Include="Assets\Scripts\Game\AuctionPhase.cs" />
+     <Compile Include="Assets\Scripts\Cards\CardSprites.cs" />
      <Compile Include="Assets\Scripts\Menu\TitleScript.cs" />
-     <Compile Include="Assets\Scripts\CardSymbols.cs" />
-     <Compile Include="Assets\Scripts\Client.cs" />
-     <Compile Include="Assets\Scripts\Controller.cs" />
-     <Compile Include="Assets\Scripts\Player.cs" />
-     <Compile Include="Assets\Scripts\QuitOption.cs" />
-     <Compile Include="Assets\Scripts\CardValues.cs" />
-     <Compile Include="Assets\Scripts\AuctionPhase.cs" />
+     <Compile Include="Assets\Scripts\Cards\CardSymbols.cs" />
+     <Compile Include="Assets\Scripts\Game\Client.cs" />
+     <Compile Include="Assets\Scripts\Game\Controller.cs" />
+     <Compile Include="Assets\Scripts\Game\Player.cs" />
+     <Compile Include="Assets\Scripts\Game\QuitOption.cs" />
+     <Compile Include="Assets\Scripts\Cards\CardValues.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

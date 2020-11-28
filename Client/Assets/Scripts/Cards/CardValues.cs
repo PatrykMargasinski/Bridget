@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardValues : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class CardValues : MonoBehaviour
     public Player owner;
     public int number;
     public CardSymbol symbol;
+    public Image cardWithoutRaycast;
 
     public void setValues(string value)
     {
@@ -23,5 +25,19 @@ public class CardValues : MonoBehaviour
     public void testValue()
     {
         Debug.Log("Click: "+this.ToString());
+    }
+
+    public void OnEnter()
+    {
+        Debug.Log("On Enter");
+        cardWithoutRaycast.sprite=CardSprites.sprites[ToString()];
+        cardWithoutRaycast.transform.position=this.transform.position;
+        cardWithoutRaycast.gameObject.SetActive(true);
+    }
+
+    public void OnExit()
+    {
+        Debug.Log("On Exit");
+        cardWithoutRaycast.gameObject.SetActive(false);
     }
 }
