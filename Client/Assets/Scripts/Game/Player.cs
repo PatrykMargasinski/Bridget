@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading;
-
+using System.Text;
 public class Player : MonoBehaviour
 {
     public GameObject card;
@@ -48,6 +48,17 @@ public class Player : MonoBehaviour
             if(str!="back") temp.GetComponent<CardValues>().setValues(str);
             cards.Add(temp);
         }
+
+    public string GetAllCards()
+    {
+        StringBuilder stringBuilder=new StringBuilder();
+        foreach(GameObject card in cards)
+        {
+            stringBuilder.Append(card.GetComponent<CardValues>().ToString());
+        }
+        return stringBuilder.ToString();
+    }
+
     public override string ToString()
     {
         return $"{nick} - {position}";

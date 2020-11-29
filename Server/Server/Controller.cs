@@ -70,11 +70,15 @@ namespace Server
                     else if (auctionPhase.passCount == 3) 
                     {
                         StringBuilder mesForGame = new StringBuilder();
-                        mesForGame.Append($"Game starts with contract {auctionPhase.bid} for team {auctionPhase.GetCurrent()}{auctionPhase.GetPartner()}");
+                        //bid - auctionPhase.bid np. 2:C
+                        //team {auctionPhase.GetNext/Current(), GetPartner() np N/S
+                        //auctionPhase.counter/recounter
+                        //first player - playerWithFirstColor
+                        mesForGame.Append($"Game starts with contract {auctionPhase.bid} for team {auctionPhase.GetNext()}{auctionPhase.GetPartner()}");
                         if (auctionPhase.counter != '0' && auctionPhase.recounter == '0') mesForGame.Append(" with counter");
                         else if (auctionPhase.counter != '0' && auctionPhase.recounter != '0') mesForGame.Append(" with recounter");
 
-                        mesForGame.Append("\nFirst player is "+auctionPhase.playerWithFirstColor);
+                        mesForGame.Append("\nFirst player is " + auctionPhase.playerWithFirstColor);
                         server.SendBroadcast(mesForGame.ToString());
                     }
                     else throw (new ArgumentException("Why are there 4 passes?"));

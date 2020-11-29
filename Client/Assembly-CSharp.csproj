@@ -47,6 +47,7 @@
      <Compile Include="Assets\Scripts\Game\Player.cs" />
      <Compile Include="Assets\Scripts\Game\QuitOption.cs" />
      <Compile Include="Assets\Scripts\Cards\CardValues.cs" />
+     <Compile Include="Assets\Scripts\Game\GamePhase.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

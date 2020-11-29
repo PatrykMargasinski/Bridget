@@ -38,5 +38,10 @@ namespace Server
         {
             return players[(2+currentPlayer)%4];
         }
+        public char GetPartner(char player)
+        {
+            int ind = Array.IndexOf(players,player);
+            return players[(2 + ind) % 4];
+        }
     }
 }

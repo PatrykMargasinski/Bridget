@@ -4,10 +4,14 @@ using System.Text;
 
 namespace Server
 {
-
     class CardComparer : Comparer<string>
     {
-        static char trump = '0';
+        public CardComparer(string trump)
+        {
+            if (trump != "BA") this.trump = trump[0];
+            else this.trump = '0';
+        }
+        private char trump;
         public override int Compare(string x, string y)
         {
             if (Color(x) == trump && Color(y) == trump) return Number(x).CompareTo(Number(y));

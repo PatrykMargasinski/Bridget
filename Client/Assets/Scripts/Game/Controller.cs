@@ -97,9 +97,9 @@ public class Controller : MonoBehaviour
             }
             else if(mes[0].IndexOf("Game")!=-1)
             {
-
                 //SetMessageForPlayer($"Contract is {mes[1]}{mes[2]} for {mes[3]} team"+(mes[4]=="0"?"":(mes[4]=="C"?" with counter":" with recounter")));
                 SetMessageForPlayer(mes[0]+mes[1]);
+                Debug.Log(players[0].GetAllCards());
             }
     }
 
