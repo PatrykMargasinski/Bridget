@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System.Text;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,6 +12,7 @@ public class Controller : MonoBehaviour
     public Client client;
     public Text messageForPlayer;
     public Player[] players;
+    public Dictionary<char,Player> playerByPosition=new Dictionary<char, Player>();
     private Queue<Action> requestQueue = new Queue<Action>();
     private AuctionPhase auctionPhase;
 
@@ -73,6 +74,7 @@ public class Controller : MonoBehaviour
                 {
                     if(index>8)index=1;
                     players[i].SetNickAndPosition(mes[index],mes[index+1][0]);
+                    playerByPosition.Add(mes[index+1][0],players[i]);
                     index+=2;
                 }
 
@@ -95,12 +97,45 @@ public class Controller : MonoBehaviour
                     auctionPhase.auctionPhaseScreen.gameObject.SetActive(true);
                 }
             }
+            else if(mes[0]=="GamePhase")
+            {
+                if(mes[1]=="DummyInitialization")
+                {
+                    if(players[0].position==mes[2][0])
+                    {
+                        //he is dummy
+                        client.SendMessage($"GamePhase:DummyCards{players[0].GetAllCards()}");
+                        players[2].RemoveAllCards(); //remove all partner's cards
+                    }
+                    else
+                    {
+                        playerByPosition[mes[2][0]].RemoveAllCards();//remove all dummy's cards
+                    }
+                    if(players[2].position==mes[2][0])
+                    {
+                        client.SendMessage($"GamePhase:PartnerCards{players[0].GetAllCards()}");
+                    }
+                }
+                else if(mes[1]=="DummyCards")
+                {
+                    StringBuilder stringBuilder=new StringBuilder("Got dummy cards");
+                    foreach(string s in mes.Skip(2)) stringBuilder.Append(s);
+                    SetMessageForPlayer(stringBuilder.ToString());
+                }
+                else if(mes[1]=="PartnerCards")
+                {
+                    StringBuilder stringBuilder=new StringBuilder("Got partner cards");
+                    foreach(string s in mes.Skip(2)) stringBuilder.Append(s);
+                    SetMessageForPlayer(stringBuilder.ToString());
+                }
+            }
+            /*
             else if(mes[0].IndexOf("Game")!=-1)
             {
                 //SetMessageForPlayer($"Contract is {mes[1]}{mes[2]} for {mes[3]} team"+(mes[4]=="0"?"":(mes[4]=="C"?" with counter":" with recounter")));
                 SetMessageForPlayer(mes[0]+mes[1]);
                 Debug.Log(players[0].GetAllCards());
-            }
+            }*/
     }
 
     public void OnApplicationQuit()

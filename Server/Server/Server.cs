@@ -10,6 +10,7 @@ namespace Server
     class Server
     {
         private List<Socket> _clientSockets = new List<Socket>();
+        public Dictionary<char, Socket> clientByPosition = new Dictionary<char, Socket>();
         private Socket _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         private Controller controller;
 

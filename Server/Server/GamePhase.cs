@@ -7,47 +7,46 @@ namespace Server
 {
     class GamePhase
     {
-        public int currentPlayer;
-        public int contractNumber;
-        public char contractTrump;
-        public char[] players = new char[] { 'S', 'E', 'N', 'W' };
-        public int passCount = 0;
-        public char counter = '0';
-        public char recounter = '0';
-        public char playerWithFirstColor = '0';
+        public string bid;
+        public char declarer;
         public char dummy;
+        public bool counter=false;
+        public bool recounter=false;
+
+        public char[] players = new char[] { 'S', 'E', 'N', 'W' };
+        public int currentPlayer;
         CardComparer comparer;
-        public GamePhase(char firstPlayer)
+        public GamePhase(string bid, char declarer, char dummy, char counter, char recounter)
         {
-            if (!players.Contains(firstPlayer)) throw new Exception("There is no player called " + firstPlayer);
-            int index = 0;
-            while (players[index] != firstPlayer) index++;
-            currentPlayer = index - 1;
-            playerWithFirstColor = firstPlayer;
+            this.bid = bid;
+            this.declarer = declarer;
+            this.dummy = dummy;
+            if (recounter != '0') this.recounter = true;
+            else if (counter != '0') this.counter = true;
+            currentPlayer = GetIndex(declarer);
         }
 
-        public void ComparerInitialization(char trump)
+        public void ComparerInit()
         {
-            comparer = new CardComparer(trump+"");
+            string[] temp = bid.Split(":");
+            comparer = new CardComparer(temp[1]);
         }
+
+        public int GetIndex(char player)
+        {
+            return Array.IndexOf(players, player);
+        }
+
         public char GetNext()
         {
             currentPlayer = (currentPlayer + 1) % 4;
-            if (currentPlayer == dummy) return GetPartner(players[currentPlayer]);
+            Console.WriteLine("Wchodze: " + currentPlayer);
             return players[currentPlayer];
         }
+
         public char GetCurrent()
         {
             return players[currentPlayer];
-        }
-        public char GetPartner()
-        {
-            return players[(2 + currentPlayer) % 4];
-        }
-        public char GetPartner(char player)
-        {
-            int ind = Array.IndexOf(players, player);
-            return players[(2 + ind) % 4];
         }
     }
 }

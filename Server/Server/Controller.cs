@@ -13,7 +13,9 @@ namespace Server
         Server server;
         public Mutex mutex = new Mutex();
         List<Player> players = new List<Player>();
+        Dictionary<char, Player> playersByPosition = new Dictionary<char, Player>();
         AuctionPhase auctionPhase;
+        GamePhase gamePhase;
         int temp = 0;
 
         public Controller()
@@ -39,6 +41,7 @@ namespace Server
             {
                 Player newPlayer = new Player(mes[1]);
                 players.Add(newPlayer);
+                server.clientByPosition.Add(players[^1].position, socket);
                 server.SendBroadcast("NewPlayerJoined:"+newPlayer.nick);
                 if(server.GetNumberOfClients()==4)
                 {
@@ -74,12 +77,19 @@ namespace Server
                         //team {auctionPhase.GetNext/Current(), GetPartner() np N/S
                         //auctionPhase.counter/recounter
                         //first player - playerWithFirstColor
-                        mesForGame.Append($"Game starts with contract {auctionPhase.bid} for team {auctionPhase.GetNext()}{auctionPhase.GetPartner()}");
-                        if (auctionPhase.counter != '0' && auctionPhase.recounter == '0') mesForGame.Append(" with counter");
-                        else if (auctionPhase.counter != '0' && auctionPhase.recounter != '0') mesForGame.Append(" with recounter");
+                        gamePhase = new GamePhase
+                            (auctionPhase.bid, 
+                            auctionPhase.playerWithFirstColor, 
+                            auctionPhase.GetPartner(auctionPhase.playerWithFirstColor), 
+                            auctionPhase.counter, 
+                            auctionPhase.recounter);
+                        //mesForGame.Append($"Game starts with contract {gamePhase.bid} for team {gamePhase.declarer}{gamePhase.dummy}");
+                        //if (gamePhase.recounter) mesForGame.Append(" with recounter");
+                        //else if (gamePhase.counter) mesForGame.Append(" with counter");
+                        //mesForGame.Append("\nFirst player is " + gamePhase.declarer);
+                        //server.SendBroadcast(mesForGame.ToString());
+                        server.SendBroadcast($"GamePhase:DummyInitialization:{gamePhase.dummy}");
 
-                        mesForGame.Append("\nFirst player is " + auctionPhase.playerWithFirstColor);
-                        server.SendBroadcast(mesForGame.ToString());
                     }
                     else throw (new ArgumentException("Why are there 4 passes?"));
                 }
@@ -111,6 +121,32 @@ namespace Server
                     server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:{auctionPhase.bid}:{mes[1]}:bid {mes[3]}{mes[4]}");
                 }
             }
+            else if(mes[0]=="GamePhase")
+            {
+                if(mes[1]=="DummyCards")
+                {
+                    StringBuilder builder = new StringBuilder("GamePhase:DummyCards");
+                    foreach(string s in mes.Skip(2))
+                    {
+                        builder.Append(":" + s);
+                    }
+                    foreach(char pos in server.clientByPosition.Keys)
+                    {
+                        if (pos != gamePhase.dummy) server.SendMessage(server.clientByPosition[pos], builder.ToString());
+                    }
+                }
+                if(mes[1] == "PartnerCards")
+                {
+                    StringBuilder builder = new StringBuilder("GamePhase:PartnerCards");
+                    foreach (string s in mes.Skip(2))
+                    {
+                        builder.Append(":" + s);
+                    }
+                    server.SendMessage(server.clientByPosition[gamePhase.dummy], builder.ToString());
+                }
+
+
+            }
             mutex.ReleaseMutex();
         }
 
@@ -125,7 +161,11 @@ namespace Server
         public void SendPlayersNicksAndPositions()
         {
             StringBuilder mes = new StringBuilder("Players");
-            foreach(Player p in players) mes.Append($":{p.nick}:{p.position}");
+            foreach (Player p in players)
+            {
+                playersByPosition.Add(p.position, p);
+                mes.Append($":{p.nick}:{p.position}");
+            }
             Console.WriteLine(mes.ToString());
             server.SendBroadcast(mes.ToString());
         }

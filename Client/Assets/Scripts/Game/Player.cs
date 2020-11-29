@@ -54,9 +54,17 @@ public class Player : MonoBehaviour
         StringBuilder stringBuilder=new StringBuilder();
         foreach(GameObject card in cards)
         {
-            stringBuilder.Append(card.GetComponent<CardValues>().ToString());
+            stringBuilder.Append(":"+card.GetComponent<CardValues>().ToString());
         }
         return stringBuilder.ToString();
+    }
+
+    public void RemoveAllCards()
+    {
+        foreach(GameObject card in cards)
+        {
+            Destroy(card);
+        }
     }
 
     public override string ToString()
