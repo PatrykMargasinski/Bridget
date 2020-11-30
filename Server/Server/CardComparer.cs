@@ -30,7 +30,7 @@ namespace Server
         }
         private char Color(string x)
         {
-            return x[x.Length - 1];
+            return x[^1];
         }
     }
 }

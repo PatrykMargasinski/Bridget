@@ -13,8 +13,8 @@ public class Controller : MonoBehaviour
     public Player[] players;
     public Dictionary<char,Player> playerByPosition=new Dictionary<char, Player>();
     private Queue<Action> requestQueue = new Queue<Action>();
-    private AuctionPhase auctionPhase;
-    private GamePhase gamePhase;
+    public AuctionPhase auctionPhase;
+    public GamePhase gamePhase;
 
     void Start()
     {
@@ -22,6 +22,7 @@ public class Controller : MonoBehaviour
         SetPlayers();
         Screen.SetResolution(620,454,false);
         auctionPhase=gameObject.GetComponent<AuctionPhase>();
+        gamePhase=gameObject.GetComponent<GamePhase>();
         client=new Client(this);
         client.SetupClient();
     } 
@@ -41,6 +42,7 @@ public class Controller : MonoBehaviour
         players[2]=GameObject.Find("PartnerCards").GetComponent<Player>();
         players[3]=GameObject.Find("EnemyBoard1").GetComponent<Player>();
        // players[3].SetAngle(2);
+       foreach(Player pl in players) pl.controller=this;
     }
 
     public void AddRequest(Action action)
@@ -100,7 +102,7 @@ public class Controller : MonoBehaviour
             }
             else if(mes[0]=="GamePhase")
             {
-                if(mes[1]=="DummyInitialization")
+                if(mes[1]=="Initialization")
                 {
                     GamePhase.dummy=mes[2][0];
                     if(players[0].position==mes[2][0])
@@ -117,18 +119,45 @@ public class Controller : MonoBehaviour
                     {
                         client.SendMessage($"GamePhase:PartnerCards{players[0].GetAllCards()}");
                     }
+                    string counterRecounter="";
+                    if(Int32.Parse(mes[5])==1) counterRecounter=" with counter";
+                    else if(Int32.Parse(mes[5])==2) counterRecounter=" with recounter";
+                    int ind=0;
+                    foreach(string mess in mes)
+                    {
+                        Debug.Log(ind+""+mess);
+                        ind++;
+                    }
+                    gamePhase.SetGameInformations($"Contract is {mes[3]} for team {mes[4]}{counterRecounter}. Dummy is {mes[2]}");
                 }
                 else if(mes[1]=="DummyCards")
                 {
                     StringBuilder stringBuilder=new StringBuilder("Got dummy cards");
-                    Debug.Log("GamePhase dummy"+GamePhase.dummy);
-                    Debug.Log("No i?"+playerByPosition[GamePhase.dummy]);
                     foreach(string s in mes.Skip(2)) {playerByPosition[GamePhase.dummy].AddCard(s);}
+                    client.SendMessage("GamePhase:ReadyToPlay");
+
                 }
                 else if(mes[1]=="PartnerCards")
                 {
                     StringBuilder stringBuilder=new StringBuilder("Got partner cards");
                     foreach(string s in mes.Skip(2)) {players[2].AddCard(s);}
+                    client.SendMessage("GamePhase:ReadyToPlay");
+                }
+                else if(mes[1]=="Move")
+                {
+                    if(mes[2][0]==players[0].position) 
+                    {
+                        SetMessageForPlayer("It's your turn");
+                        foreach(GameObject card in players[0].cards)
+                        {
+                            card.GetComponent<CardValues>().clickable=true;
+                        }
+
+                    }
+                    else
+                    {
+                        SetMessageForPlayer($"It's {mes[2][0]}'s turn");
+                    }
                 }
             }
             /*

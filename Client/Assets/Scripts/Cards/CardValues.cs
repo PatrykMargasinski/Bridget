@@ -18,6 +18,7 @@ public class CardValues : MonoBehaviour
         number=Int32.Parse(value.Substring(0,value.Length-1));
         string symbolChar=value[value.Length-1].ToString();
         symbol=(CardSymbol)Enum.Parse(typeof(CardSymbol),symbolChar);
+        clickable=false;
     }
     public override string ToString()
     {
@@ -45,7 +46,14 @@ public class CardValues : MonoBehaviour
 
     public void OnClick()
     {
-        Debug.Log("On Exit");
-        Debug.Log($"On click. Card: {ToString()} Player: {owner.nick} - {owner.position}");
+        //Debug.Log($"On click. Card: {ToString()} Player: {owner.nick} - {owner.position}");
+        if(clickable==true)
+        {
+            foreach(GameObject card in owner.cards) card.GetComponent<CardValues>().clickable=false;
+            owner.controller.gamePhase.SendCard(ToString());
+            owner.cardToPut.GetComponent<Image>().sprite=gameObject.GetComponent<Image>().sprite;
+            owner.cardToPut.gameObject.SetActive(true);
+            Destroy(gameObject);
+        }
     }
 }

@@ -16,8 +16,13 @@ public class GamePhase : MonoBehaviour
         gameInformations.text="";
     }
 
-    void onCardClick()
+    public void SetGameInformations(string mes)
     {
-        
+        gameInformations.text=mes;
+    }
+
+    public void SendCard(string card)
+    {
+        controller.client.SendMessage($"GamePhase:Move:{controller.players[0].position}:{card}");
     }
 }

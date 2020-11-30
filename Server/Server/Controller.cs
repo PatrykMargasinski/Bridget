@@ -88,10 +88,12 @@ namespace Server
                         //else if (gamePhase.counter) mesForGame.Append(" with counter");
                         //mesForGame.Append("\nFirst player is " + gamePhase.declarer);
                         //server.SendBroadcast(mesForGame.ToString());
-                        server.SendBroadcast($"GamePhase:DummyInitialization:{gamePhase.dummy}");
-
+                        int counterOrRecounter=0;
+                        if (gamePhase.recounter == true) counterOrRecounter = 2;
+                        else if (gamePhase.counter == true) counterOrRecounter = 1;
+                        server.SendBroadcast($"GamePhase:Initialization:{gamePhase.dummy}:{gamePhase.bid.Replace(":","")}:{gamePhase.GetContractTeam()}:{counterOrRecounter}");
                     }
-                    else throw (new ArgumentException("Why are there 4 passes?"));
+                    else throw new ArgumentException("Why are there 4 passes?");
                 }
                 else if(mes[2]=="Counter")
                 {
@@ -134,8 +136,9 @@ namespace Server
                     {
                         if (pos != gamePhase.dummy) server.SendMessage(server.clientByPosition[pos], builder.ToString());
                     }
+                    temp = 0;
                 }
-                if(mes[1] == "PartnerCards")
+                else if(mes[1] == "PartnerCards")
                 {
                     StringBuilder builder = new StringBuilder("GamePhase:PartnerCards");
                     foreach (string s in mes.Skip(2))
@@ -143,9 +146,22 @@ namespace Server
                         builder.Append(":" + s);
                     }
                     server.SendMessage(server.clientByPosition[gamePhase.dummy], builder.ToString());
+                    temp = 0;
                 }
-
-
+                else if(mes[1] == "ReadyToPlay")
+                {
+                    temp++;
+                    Console.WriteLine("Ready to play: " + temp);
+                    if (temp == 4)
+                    {
+                        server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}");
+                    }
+                    else if (temp > 4) throw new Exception("5 players? Really?");
+                }
+                else if(mes[1]=="Move")
+                {
+                    Console.WriteLine($"Got from {mes[2]} card {mes[3]}");
+                }
             }
             mutex.ReleaseMutex();
         }

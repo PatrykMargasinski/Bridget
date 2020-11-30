@@ -26,6 +26,11 @@ namespace Server
             currentPlayer = GetIndex(declarer);
         }
 
+        public string GetContractTeam()
+        {
+            return ""+declarer + dummy;
+        }
+
         public void ComparerInit()
         {
             string[] temp = bid.Split(":");

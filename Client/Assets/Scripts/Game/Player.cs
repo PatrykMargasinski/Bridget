@@ -7,12 +7,14 @@ using System.Threading;
 using System.Text;
 public class Player : MonoBehaviour
 {
+    public Controller controller;
     public GameObject card;
     public Text playerText;
     public string nick;
     public char position;
-    private List<GameObject> cards=new List<GameObject>();
+    public List<GameObject> cards=new List<GameObject>();
     private Quaternion quaternion;
+    public Image cardToPut;
     public Player()
     {
         quaternion=Quaternion.identity;
