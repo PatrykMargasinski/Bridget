@@ -11,6 +11,7 @@ public class CardValues : MonoBehaviour
     public int number;
     public CardSymbol symbol;
     public Image cardWithoutRaycast;
+    public bool clickable;
 
     public void setValues(string value)
     {
@@ -22,22 +23,29 @@ public class CardValues : MonoBehaviour
     {
         return number.ToString()+symbol.ToString();
     }
-    public void testValue()
-    {
-        Debug.Log("Click: "+this.ToString());
-    }
-
     public void OnEnter()
     {
         Debug.Log("On Enter");
-        cardWithoutRaycast.sprite=CardSprites.sprites[ToString()];
-        cardWithoutRaycast.transform.position=this.transform.position;
-        cardWithoutRaycast.gameObject.SetActive(true);
+        if(this.ToString()!="0C")
+        {
+            cardWithoutRaycast.sprite=CardSprites.sprites[ToString()];
+            cardWithoutRaycast.transform.position=this.transform.position;
+            cardWithoutRaycast.gameObject.SetActive(true);
+        }
     }
 
     public void OnExit()
     {
         Debug.Log("On Exit");
-        cardWithoutRaycast.gameObject.SetActive(false);
+        if(this.ToString()!="0C")
+        {
+            cardWithoutRaycast.gameObject.SetActive(false);
+        }
+    }
+
+    public void OnClick()
+    {
+        Debug.Log("On Exit");
+        Debug.Log($"On click. Card: {ToString()} Player: {owner.nick} - {owner.position}");
     }
 }

@@ -17,7 +17,6 @@ namespace Server
         AuctionPhase auctionPhase;
         GamePhase gamePhase;
         int temp = 0;
-
         public Controller()
         {
             cd = new CardDeck();
@@ -32,6 +31,7 @@ namespace Server
             Console.ReadLine();
             Console.ReadLine();
         }
+
 
         public void Reaction(Socket socket, string message)
         {

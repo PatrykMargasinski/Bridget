@@ -1,17 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GamePhase : MonoBehaviour
 {
-    // Start is called before the first frame update
+    static public char dummy;
+    Controller controller;
+    public Text gameInformations;
+    public string bid;
+
     void Start()
     {
-        
+        controller=gameObject.GetComponent<Controller>();
+        gameInformations.text="";
     }
 
-    // Update is called once per frame
-    void Update()
+    void onCardClick()
     {
         
     }

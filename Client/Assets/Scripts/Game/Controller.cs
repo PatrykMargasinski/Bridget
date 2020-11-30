@@ -8,13 +8,13 @@ using System.Linq;
 
 public class Controller : MonoBehaviour
 {
-    //Main
     public Client client;
     public Text messageForPlayer;
     public Player[] players;
     public Dictionary<char,Player> playerByPosition=new Dictionary<char, Player>();
     private Queue<Action> requestQueue = new Queue<Action>();
     private AuctionPhase auctionPhase;
+    private GamePhase gamePhase;
 
     void Start()
     {
@@ -37,10 +37,10 @@ public class Controller : MonoBehaviour
     {
         players[0]=GameObject.Find("MyCards").GetComponent<Player>();
         players[1]=GameObject.Find("EnemyBoard2").GetComponent<Player>();
-        players[1].SetAngle(1);
+        //players[1].SetAngle(1);
         players[2]=GameObject.Find("PartnerCards").GetComponent<Player>();
         players[3]=GameObject.Find("EnemyBoard1").GetComponent<Player>();
-        players[3].SetAngle(2);
+       // players[3].SetAngle(2);
     }
 
     public void AddRequest(Action action)
@@ -77,6 +77,7 @@ public class Controller : MonoBehaviour
                     playerByPosition.Add(mes[index+1][0],players[i]);
                     index+=2;
                 }
+                foreach(char s in playerByPosition.Keys) Debug.Log(s);
 
             }
             else if(mes[0]=="Bidding")
@@ -101,6 +102,7 @@ public class Controller : MonoBehaviour
             {
                 if(mes[1]=="DummyInitialization")
                 {
+                    GamePhase.dummy=mes[2][0];
                     if(players[0].position==mes[2][0])
                     {
                         //he is dummy
@@ -119,14 +121,14 @@ public class Controller : MonoBehaviour
                 else if(mes[1]=="DummyCards")
                 {
                     StringBuilder stringBuilder=new StringBuilder("Got dummy cards");
-                    foreach(string s in mes.Skip(2)) stringBuilder.Append(s);
-                    SetMessageForPlayer(stringBuilder.ToString());
+                    Debug.Log("GamePhase dummy"+GamePhase.dummy);
+                    Debug.Log("No i?"+playerByPosition[GamePhase.dummy]);
+                    foreach(string s in mes.Skip(2)) {playerByPosition[GamePhase.dummy].AddCard(s);}
                 }
                 else if(mes[1]=="PartnerCards")
                 {
                     StringBuilder stringBuilder=new StringBuilder("Got partner cards");
-                    foreach(string s in mes.Skip(2)) stringBuilder.Append(s);
-                    SetMessageForPlayer(stringBuilder.ToString());
+                    foreach(string s in mes.Skip(2)) {players[2].AddCard(s);}
                 }
             }
             /*

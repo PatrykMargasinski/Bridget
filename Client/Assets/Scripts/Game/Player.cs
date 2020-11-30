@@ -45,7 +45,9 @@ public class Player : MonoBehaviour
             GameObject temp = Instantiate(card,new Vector3(0,0,0),quaternion);
             temp.transform.SetParent(this.gameObject.transform);
             temp.gameObject.GetComponent<Image>().sprite = CardSprites.sprites[str];
-            if(str!="back") temp.GetComponent<CardValues>().setValues(str);
+            CardValues cardValues=temp.GetComponent<CardValues>();
+            if(str!="back") cardValues.setValues(str);
+            cardValues.owner=this;
             cards.Add(temp);
         }
 
