@@ -195,6 +195,10 @@ public class Controller : MonoBehaviour
                     else throw new Exception("Is there or not a trick?");
                 }
             }
+            else if(mes[0]=="Message")
+            {
+                SetMessageForPlayer(mes[1]);
+            }
             /*
             else if(mes[0].IndexOf("Game")!=-1)
             {

@@ -24,6 +24,8 @@ public class GamePhase : MonoBehaviour
     public void SendCard(string card)
     {
         controller.client.SendMessage($"GamePhase:Move:{controller.players[0].position}:{card}");
+        if(controller.players[0].cards.Count==0)
+            controller.client.SendMessage("GamePhase:NoCards");
     }
 
     public void ChangeTrickNumber()

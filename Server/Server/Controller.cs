@@ -154,6 +154,7 @@ namespace Server
                     Console.WriteLine("Ready to play: " + temp);
                     if (temp == 4)
                     {
+                        temp = 0;
                         server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}:0");
                     }
                     else if (temp > 4) throw new Exception("5 players? Really?");
@@ -183,6 +184,12 @@ namespace Server
                     {
                         throw new Exception("Too many moves");
                     }
+                }
+                else if(mes[1]=="NoCards")
+                {
+                    temp++;
+                    if (temp == 4)
+                        server.SendBroadcast("Message:Good,Good!");
                 }
             }
             mutex.ReleaseMutex();

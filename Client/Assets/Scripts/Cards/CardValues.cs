@@ -59,8 +59,8 @@ public class CardValues : MonoBehaviour
             owner.controller.gamePhase.SendCard(ToString());
             owner.cardToPut.GetComponent<Image>().sprite=gameObject.GetComponent<Image>().sprite;
             owner.cardToPut.gameObject.SetActive(true);
-            owner.cards.Remove(gameObject);
-            Destroy(gameObject);
+            owner.RemoveOneCard(ToString());
+            cardWithoutRaycast.gameObject.SetActive(false);
         }
     }
 }
