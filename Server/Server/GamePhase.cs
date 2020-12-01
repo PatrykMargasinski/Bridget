@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Server
@@ -12,10 +13,13 @@ namespace Server
         public char dummy;
         public bool counter=false;
         public bool recounter=false;
+        public char requiredColor = '0';
+        public int gotTricks = 0;
 
         public char[] players = new char[] { 'S', 'E', 'N', 'W' };
         public int currentPlayer;
         CardComparer comparer;
+        public Dictionary<string, char> moves = new Dictionary<string, char>();
         public GamePhase(string bid, char declarer, char dummy, char counter, char recounter)
         {
             this.bid = bid;
@@ -24,6 +28,7 @@ namespace Server
             if (recounter != '0') this.recounter = true;
             else if (counter != '0') this.counter = true;
             currentPlayer = GetIndex(declarer);
+            ComparerInit();
         }
 
         public string GetContractTeam()
@@ -52,6 +57,16 @@ namespace Server
         public char GetCurrent()
         {
             return players[currentPlayer];
+        }
+
+        public char GetMax()
+        {
+            string max = moves.Keys.OrderByDescending(x => x, comparer).First();
+            string[] temp = bid.Split(":");
+            foreach (string s in moves.Keys) Console.WriteLine("Konkurent: " + s);
+            Console.WriteLine("Atut: " + temp[1]);
+            Console.WriteLine("Winner: "+max);
+            return moves[max];
         }
     }
 }

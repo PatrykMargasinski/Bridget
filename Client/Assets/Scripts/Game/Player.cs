@@ -65,9 +65,31 @@ public class Player : MonoBehaviour
 
     public void RemoveAllCards()
     {
-        foreach(GameObject card in cards)
-        {
+        while(cards.Count!=0)
+        { 
+            Destroy(cards[0]);
+            cards.Remove(cards[0]);
+        }
+    }
+
+    public void RemoveOneCard(string cardName)
+    {
+        GameObject cardToRemove = cards.Find(card => card.GetComponent<CardValues>().ToString()==cardName);
+        RemoveOneCard(cardToRemove);
+    }
+
+    public void RemoveOneCard(GameObject card)
+    {
+        if(cards.Remove(card)==true)
             Destroy(card);
+    }
+
+    public void RemoveOneCard()
+    {
+        if(cards.Count!=0)
+        {
+        Destroy(cards[0]);
+        cards.RemoveAt(0);
         }
     }
 

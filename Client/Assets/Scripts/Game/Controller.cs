@@ -128,7 +128,7 @@ public class Controller : MonoBehaviour
                         Debug.Log(ind+""+mess);
                         ind++;
                     }
-                    gamePhase.SetGameInformations($"Contract is {mes[3]} for team {mes[4]}{counterRecounter}. Dummy is {mes[2]}");
+                    gamePhase.SetGameInformations($"Contract is {mes[3]} for team {mes[4]}{counterRecounter}. Dummy is {mes[2]}. Got tricks: 0");
                 }
                 else if(mes[1]=="DummyCards")
                 {
@@ -145,19 +145,54 @@ public class Controller : MonoBehaviour
                 }
                 else if(mes[1]=="Move")
                 {
+                    if(players[0].cardToPut.IsActive() && players[1].cardToPut.IsActive() && players[2].cardToPut.IsActive() && players[3].cardToPut.IsActive())
+                    {
+                        foreach(Player p in players) p.cardToPut.gameObject.SetActive(false);
+                    }
                     if(mes[2][0]==players[0].position) 
                     {
                         SetMessageForPlayer("It's your turn");
+                        bool isSomethingClickable=false;
                         foreach(GameObject card in players[0].cards)
                         {
-                            card.GetComponent<CardValues>().clickable=true;
+                            if(mes[3][0]=='0' || card.GetComponent<CardValues>().GetColor()==mes[3][0]) 
+                            {
+                                isSomethingClickable=true;
+                                card.GetComponent<CardValues>().clickable=true;
+                            }
                         }
+                        Debug.Log(isSomethingClickable?"YESYESYES":"NONONO");
+                        if(isSomethingClickable==false)
+                            foreach(GameObject card in players[0].cards)
+                                card.GetComponent<CardValues>().clickable=true;
 
                     }
                     else
                     {
                         SetMessageForPlayer($"It's {mes[2][0]}'s turn");
                     }
+                }
+                else if(mes[1]=="MoveDone")
+                {
+                    playerByPosition[mes[2][0]].cardToPut.GetComponent<Image>().sprite=CardSprites.sprites[mes[3]];
+                    playerByPosition[mes[2][0]].cardToPut.gameObject.SetActive(true);
+                    if(mes[2][0]==players[0].position || mes[2][0]==GamePhase.dummy) playerByPosition[mes[2][0]].RemoveOneCard(mes[3]);
+                    else playerByPosition[mes[2][0]].RemoveOneCard();
+                }
+                else if(mes[1]=="Winner")
+                {
+                    int gotTrick=Int32.Parse(mes[2]);
+                    if(gotTrick==1) 
+                    {
+                        gamePhase.tricks++;
+                        SetMessageForPlayer($"Trick acquired by player {mes[3]}");
+                        gamePhase.ChangeTrickNumber();
+                    }
+                    else if(gotTrick==0)
+                    {
+                        SetMessageForPlayer("Trick lost");
+                    }
+                    else throw new Exception("Is there or not a trick?");
                 }
             }
             /*

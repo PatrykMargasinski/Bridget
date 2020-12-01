@@ -5983,6 +5983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameInformations: {fileID: 113471882}
   bid: 
+  tricks: 0
 --- !u!1 &2105844946
 GameObject:
   m_ObjectHideFlags: 0

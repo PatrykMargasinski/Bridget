@@ -24,9 +24,15 @@ public class CardValues : MonoBehaviour
     {
         return number.ToString()+symbol.ToString();
     }
+
+    public char GetColor()
+    {
+        return symbol.ToString()[0];
+    }
     public void OnEnter()
     {
         Debug.Log("On Enter");
+        Debug.Log(clickable?"Clickable":"Not clickable");
         if(this.ToString()!="0C")
         {
             cardWithoutRaycast.sprite=CardSprites.sprites[ToString()];
@@ -53,6 +59,7 @@ public class CardValues : MonoBehaviour
             owner.controller.gamePhase.SendCard(ToString());
             owner.cardToPut.GetComponent<Image>().sprite=gameObject.GetComponent<Image>().sprite;
             owner.cardToPut.gameObject.SetActive(true);
+            owner.cards.Remove(gameObject);
             Destroy(gameObject);
         }
     }

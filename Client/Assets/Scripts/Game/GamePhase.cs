@@ -9,7 +9,7 @@ public class GamePhase : MonoBehaviour
     Controller controller;
     public Text gameInformations;
     public string bid;
-
+    public int tricks=0;
     void Start()
     {
         controller=gameObject.GetComponent<Controller>();
@@ -24,5 +24,11 @@ public class GamePhase : MonoBehaviour
     public void SendCard(string card)
     {
         controller.client.SendMessage($"GamePhase:Move:{controller.players[0].position}:{card}");
+    }
+
+    public void ChangeTrickNumber()
+    {
+        string[] temp = gameInformations.text.Split(':');
+        SetGameInformations($"{temp[0]}:{tricks}");
     }
 }

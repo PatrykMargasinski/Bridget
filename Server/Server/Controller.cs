@@ -61,7 +61,7 @@ namespace Server
                 {
                     SendPlayersNicksAndPositions();
                     auctionPhase = new AuctionPhase('N');
-                    server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:1:BA:Auction phase started: ");
+                    server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:0:BA:Auction phase started: ");
                 }
             }
             else if (mes[0] == "Bidding")
@@ -125,20 +125,20 @@ namespace Server
             }
             else if(mes[0]=="GamePhase")
             {
-                if(mes[1]=="DummyCards")
+                if (mes[1] == "DummyCards")
                 {
                     StringBuilder builder = new StringBuilder("GamePhase:DummyCards");
-                    foreach(string s in mes.Skip(2))
+                    foreach (string s in mes.Skip(2))
                     {
                         builder.Append(":" + s);
                     }
-                    foreach(char pos in server.clientByPosition.Keys)
+                    foreach (char pos in server.clientByPosition.Keys)
                     {
                         if (pos != gamePhase.dummy) server.SendMessage(server.clientByPosition[pos], builder.ToString());
                     }
                     temp = 0;
                 }
-                else if(mes[1] == "PartnerCards")
+                else if (mes[1] == "PartnerCards")
                 {
                     StringBuilder builder = new StringBuilder("GamePhase:PartnerCards");
                     foreach (string s in mes.Skip(2))
@@ -148,19 +148,41 @@ namespace Server
                     server.SendMessage(server.clientByPosition[gamePhase.dummy], builder.ToString());
                     temp = 0;
                 }
-                else if(mes[1] == "ReadyToPlay")
+                else if (mes[1] == "ReadyToPlay")
                 {
                     temp++;
                     Console.WriteLine("Ready to play: " + temp);
                     if (temp == 4)
                     {
-                        server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}");
+                        server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}:0");
                     }
                     else if (temp > 4) throw new Exception("5 players? Really?");
                 }
-                else if(mes[1]=="Move")
+                else if (mes[1] == "Move")
                 {
                     Console.WriteLine($"Got from {mes[2]} card {mes[3]}");
+                    server.SendBroadcast($"GamePhase:MoveDone:{mes[2]}:{mes[3]}");
+                    if (gamePhase.requiredColor == '0') gamePhase.requiredColor = mes[3][^1];
+                    gamePhase.moves.Add(mes[3], mes[2][0]);
+                    if (gamePhase.moves.Count < 4)
+                    {
+                        server.SendBroadcast($"GamePhase:Move:{gamePhase.GetNext()}:{gamePhase.requiredColor}");
+                    }
+                    else if (gamePhase.moves.Count==4)
+                    {
+                        char winner = gamePhase.GetMax();
+                        int gotTrick = (winner == gamePhase.dummy || winner == gamePhase.declarer ? 1 : 0);
+                        server.SendBroadcast($"GamePhase:Winner:{gotTrick}:{winner}");
+                        gamePhase.currentPlayer = gamePhase.GetIndex(winner);
+                        gamePhase.requiredColor = '0';
+                        Thread.Sleep(1000);
+                        server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}:0");
+                        gamePhase.moves.Clear();
+                    }
+                    else
+                    {
+                        throw new Exception("Too many moves");
+                    }
                 }
             }
             mutex.ReleaseMutex();
