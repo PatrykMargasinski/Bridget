@@ -177,19 +177,18 @@ namespace Server
                         gamePhase.currentPlayer = gamePhase.GetIndex(winner);
                         gamePhase.requiredColor = '0';
                         Thread.Sleep(1000);
-                        server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}:0");
+                        gamePhase.tricks--;
+                        Console.WriteLine("Tricks: " + gamePhase.tricks);
+                        if (gamePhase.tricks != 0)
+                            server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}:0");
+                        else
+                            server.SendBroadcast($"Message:You did it");
                         gamePhase.moves.Clear();
                     }
                     else
                     {
                         throw new Exception("Too many moves");
                     }
-                }
-                else if(mes[1]=="NoCards")
-                {
-                    temp++;
-                    if (temp == 4)
-                        server.SendBroadcast("Message:Good,Good!");
                 }
             }
             mutex.ReleaseMutex();

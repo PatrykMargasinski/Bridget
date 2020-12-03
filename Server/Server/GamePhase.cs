@@ -15,6 +15,7 @@ namespace Server
         public bool recounter=false;
         public char requiredColor = '0';
         public int gotTricks = 0;
+        public int tricks = 0;
 
         public char[] players = new char[] { 'S', 'E', 'N', 'W' };
         public int currentPlayer;
@@ -28,6 +29,7 @@ namespace Server
             if (recounter != '0') this.recounter = true;
             else if (counter != '0') this.counter = true;
             currentPlayer = GetIndex(declarer);
+            tricks = 13;
             ComparerInit();
         }
 
