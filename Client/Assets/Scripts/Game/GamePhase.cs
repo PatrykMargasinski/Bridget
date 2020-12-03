@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class GamePhase : MonoBehaviour
 {
-    static public char dummy;
+    public char dummy;
+    public bool dummyMove=false;
     Controller controller;
     public Text gameInformations;
     public string bid;
@@ -23,7 +24,9 @@ public class GamePhase : MonoBehaviour
 
     public void SendCard(string card)
     {
-        controller.client.SendMessage($"GamePhase:Move:{controller.players[0].position}:{card}");
+        Player player=dummyMove?controller.players[2]:controller.players[0];
+        dummyMove=false;
+        controller.client.SendMessage($"GamePhase:Move:{player.position}:{card}");
         if(controller.players[0].cards.Count==0)
             controller.client.SendMessage("GamePhase:NoCards");
     }

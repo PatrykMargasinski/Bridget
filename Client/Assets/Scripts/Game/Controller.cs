@@ -84,7 +84,6 @@ public class Controller : MonoBehaviour
             }
             else if(mes[0]=="Bidding")
             {
-                Debug.Log("Mes5"+mes[5]);
                 auctionPhase.highestNumber=Int32.Parse(mes[2]);
                 auctionPhase.highestColor=(TrumpColor)Enum.Parse(typeof(TrumpColor),mes[3]);
                 auctionPhase.Initialization();
@@ -104,7 +103,7 @@ public class Controller : MonoBehaviour
             {
                 if(mes[1]=="Initialization")
                 {
-                    GamePhase.dummy=mes[2][0];
+                    gamePhase.dummy=mes[2][0];
                     if(players[0].position==mes[2][0])
                     {
                         //he is dummy
@@ -133,7 +132,7 @@ public class Controller : MonoBehaviour
                 else if(mes[1]=="DummyCards")
                 {
                     StringBuilder stringBuilder=new StringBuilder("Got dummy cards");
-                    foreach(string s in mes.Skip(2)) {playerByPosition[GamePhase.dummy].AddCard(s);}
+                    foreach(string s in mes.Skip(2)) {playerByPosition[gamePhase.dummy].AddCard(s);}
                     client.SendMessage("GamePhase:ReadyToPlay");
 
                 }
@@ -149,11 +148,19 @@ public class Controller : MonoBehaviour
                     {
                         foreach(Player p in players) p.cardToPut.gameObject.SetActive(false);
                     }
-                    if(mes[2][0]==players[0].position) 
+                    Player player;
+                    if(mes[2][0]==gamePhase.dummy && players[2].position==gamePhase.dummy) 
                     {
-                        SetMessageForPlayer("It's your turn");
+                        gamePhase.dummyMove=true;
+                        player=players[2];
+                    }
+                    else player=players[0];
+
+                    if((mes[2][0]==players[0].position && players[0].position!=gamePhase.dummy) || gamePhase.dummyMove==true) 
+                    {
+                        SetMessageForPlayer("It's your turn" +(gamePhase.dummyMove?" as dummy":""));
                         bool isSomethingClickable=false;
-                        foreach(GameObject card in players[0].cards)
+                        foreach(GameObject card in player.cards)
                         {
                             if(mes[3][0]=='0' || card.GetComponent<CardValues>().GetColor()==mes[3][0]) 
                             {
@@ -161,9 +168,9 @@ public class Controller : MonoBehaviour
                                 card.GetComponent<CardValues>().clickable=true;
                             }
                         }
-                        Debug.Log(isSomethingClickable?"YESYESYES":"NONONO");
+
                         if(isSomethingClickable==false)
-                            foreach(GameObject card in players[0].cards)
+                            foreach(GameObject card in player.cards)
                                 card.GetComponent<CardValues>().clickable=true;
 
                     }
@@ -176,7 +183,7 @@ public class Controller : MonoBehaviour
                 {
                     playerByPosition[mes[2][0]].cardToPut.GetComponent<Image>().sprite=CardSprites.sprites[mes[3]];
                     playerByPosition[mes[2][0]].cardToPut.gameObject.SetActive(true);
-                    if(mes[2][0]==players[0].position || mes[2][0]==GamePhase.dummy) playerByPosition[mes[2][0]].RemoveOneCard(mes[3]);
+                    if(mes[2][0]==players[0].position || mes[2][0]==gamePhase.dummy) playerByPosition[mes[2][0]].RemoveOneCard(mes[3]);
                     else playerByPosition[mes[2][0]].RemoveOneCard();
                 }
                 else if(mes[1]=="Winner")
