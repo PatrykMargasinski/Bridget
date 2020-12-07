@@ -38,10 +38,17 @@ namespace Server
             return ""+declarer + dummy;
         }
 
+        public string GetDefenders()
+        {
+            string temp = "";
+            foreach (char c in players) if (c != declarer && c != dummy) temp += c;
+            return temp;
+        }
+
         public void ComparerInit()
         {
             string[] temp = bid.Split(":");
-            comparer = new CardComparer(temp[1]);
+            comparer = new CardComparer(temp[1],this);
         }
 
         public int GetIndex(char player)
@@ -64,6 +71,7 @@ namespace Server
         public char GetMax()
         {
             string max = moves.Keys.OrderByDescending(x => x, comparer).First();
+
             string[] temp = bid.Split(":");
             foreach (string s in moves.Keys) Console.WriteLine("Konkurent: " + s);
             Console.WriteLine("Atut: " + temp[1]);

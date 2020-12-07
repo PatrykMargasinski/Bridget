@@ -173,6 +173,7 @@ namespace Server
                     {
                         char winner = gamePhase.GetMax();
                         int gotTrick = (winner == gamePhase.dummy || winner == gamePhase.declarer ? 1 : 0);
+                        if (gotTrick == 1) gamePhase.gotTricks++;
                         server.SendBroadcast($"GamePhase:Winner:{gotTrick}:{winner}");
                         gamePhase.currentPlayer = gamePhase.GetIndex(winner);
                         gamePhase.requiredColor = '0';
@@ -182,7 +183,14 @@ namespace Server
                         if (gamePhase.tricks != 0)
                             server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}:0");
                         else
-                            server.SendBroadcast($"Message:You did it");
+                        {
+                            Score scoreInstance = new Score(gamePhase.bid,gamePhase.gotTricks,gamePhase.counter,gamePhase.recounter);
+                            int score = scoreInstance.GetScore();
+                            server.SendBroadcast($"Score:{gamePhase.GetContractTeam()}:{(score >= 0 ? score : 0)}:{gamePhase.GetDefenders()}:{(score < 0 ? -score : 0)}");
+                            Console.WriteLine($"Bid, gottricks,counter,recounter: {gamePhase.bid}, {gamePhase.gotTricks}, {gamePhase.counter}, {gamePhase.recounter}");
+                            Console.WriteLine(score);
+                        }
+
                         gamePhase.moves.Clear();
                     }
                     else

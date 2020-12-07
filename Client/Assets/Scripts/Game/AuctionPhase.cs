@@ -97,6 +97,7 @@ public class AuctionPhase : MonoBehaviour
 
     public void BidActions(string action)
     {
+        Controller.TakeScreen();
         switch(action)
         {
             case "Pass":

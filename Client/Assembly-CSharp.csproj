@@ -38,6 +38,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Menu\ConnectButton.cs" />
      <Compile Include="Assets\Scripts\Game\TrumpColor.cs" />
+     <Compile Include="Assets\Scripts\Game\GamePhase.cs" />
      <Compile Include="Assets\Scripts\Game\AuctionPhase.cs" />
      <Compile Include="Assets\Scripts\Cards\CardSprites.cs" />
      <Compile Include="Assets\Scripts\Menu\TitleScript.cs" />
@@ -47,7 +48,7 @@
      <Compile Include="Assets\Scripts\Game\Player.cs" />
      <Compile Include="Assets\Scripts\Game\QuitOption.cs" />
      <Compile Include="Assets\Scripts\Cards\CardValues.cs" />
-     <Compile Include="Assets\Scripts\Game\GamePhase.cs" />
+     <Compile Include="Assets\Scripts\Game\Scoring.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

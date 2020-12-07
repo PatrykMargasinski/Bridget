@@ -30,7 +30,6 @@ namespace Server
 
         void ComputeScore()
         {
-            Console.WriteLine(ContractPassed());
             if(ContractPassed()==false)
             {
                 score = ComputeScoreNegative();
@@ -39,7 +38,7 @@ namespace Server
             {
                 if (recounter) score = ComputeScorePositiveRecounter();
                 else if (counter) score = ComputeScorePositiveCounter();
-                else ComputeScorePositiveNoCR();
+                else score = ComputeScorePositiveNoCR();
             }
         }
 
@@ -71,7 +70,6 @@ namespace Server
 
             if (contractTricks + 6 == 12) bonusScore += 500;
             else if (contractTricks + 6 == 13) bonusScore += 1000;
-
             return contractScore + bonusScore + overContractScore;
         }
         int ComputeScoreNegative()
@@ -81,7 +79,7 @@ namespace Server
             {
                 if (penalty == 1) score = -200;
                 else if (penalty == 2) score = -600;
-                else if (penalty == 3) score = -10000;
+                else if (penalty == 3) score = -1000;
                 else score = -1000 - 600 * (penalty - 3);
             }
             else if(counter)
@@ -95,7 +93,7 @@ namespace Server
             {
                 score = penalty * -50;
             }
-            return penalty;
+            return score;
         }
 
         int ComputeScorePositiveCounter()

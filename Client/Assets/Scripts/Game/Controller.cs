@@ -15,7 +15,13 @@ public class Controller : MonoBehaviour
     private Queue<Action> requestQueue = new Queue<Action>();
     public AuctionPhase auctionPhase;
     public GamePhase gamePhase;
-
+    public Scoring scoring;
+    static public int screenNumber=0;
+    static public void TakeScreen()
+    {
+        ScreenCapture.CaptureScreenshot(ConnectButton.nick+screenNumber.ToString()+".png");
+        screenNumber++;
+    }
     void Start()
     {
         players=new Player[4];
@@ -23,6 +29,7 @@ public class Controller : MonoBehaviour
         Screen.SetResolution(620,454,false);
         auctionPhase=gameObject.GetComponent<AuctionPhase>();
         gamePhase=gameObject.GetComponent<GamePhase>();
+        scoring=gameObject.GetComponent<Scoring>();
         client=new Client(this);
         client.SetupClient();
     } 
@@ -62,6 +69,7 @@ public class Controller : MonoBehaviour
                 }
                 SetMessageForPlayer("Cards acquired");
                 client.SendMessage("CardsAcquired");
+                TakeScreen();
             }
             else if(mes[0]=="NewPlayerJoined")
             {
@@ -183,8 +191,10 @@ public class Controller : MonoBehaviour
                 {
                     playerByPosition[mes[2][0]].cardToPut.GetComponent<Image>().sprite=CardSprites.sprites[mes[3]];
                     playerByPosition[mes[2][0]].cardToPut.gameObject.SetActive(true);
-                    if(mes[2][0]==players[0].position || mes[2][0]==gamePhase.dummy) playerByPosition[mes[2][0]].RemoveOneCard(mes[3]);
+                    bool dummyPartnerCondition=(players[0].position==gamePhase.dummy && mes[2][0]==players[2].position);
+                    if(mes[2][0]==players[0].position || mes[2][0]==gamePhase.dummy || dummyPartnerCondition) playerByPosition[mes[2][0]].RemoveOneCard(mes[3]);
                     else playerByPosition[mes[2][0]].RemoveOneCard();
+                    Controller.TakeScreen();
                 }
                 else if(mes[1]=="Winner")
                 {
@@ -202,17 +212,17 @@ public class Controller : MonoBehaviour
                     else throw new Exception("Is there or not a trick?");
                 }
             }
-            else if(mes[0]=="Message")
+            else if(mes[0]=="Score")
             {
-                SetMessageForPlayer(mes[1]);
+                SetMessageForPlayer("Scoring");
+                scoring.gameObject.SetActive(true);
+                gamePhase.SetGameInformations($"{mes[1]} has {mes[2]} points {mes[3]} has {mes[4]} points");
+                scoring.nsTeam.text=mes[2];
+                scoring.nsTeam.text=mes[4];
+                Debug.Log($"Team: {mes[1]} have {mes[2]} points");
+                Debug.Log($"Team: {mes[3]} have {mes[4]} points");
+                Controller.TakeScreen();
             }
-            /*
-            else if(mes[0].IndexOf("Game")!=-1)
-            {
-                //SetMessageForPlayer($"Contract is {mes[1]}{mes[2]} for {mes[3]} team"+(mes[4]=="0"?"":(mes[4]=="C"?" with counter":" with recounter")));
-                SetMessageForPlayer(mes[0]+mes[1]);
-                Debug.Log(players[0].GetAllCards());
-            }*/
     }
 
     public void OnApplicationQuit()

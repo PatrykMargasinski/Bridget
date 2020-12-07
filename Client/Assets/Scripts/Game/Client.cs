@@ -24,14 +24,17 @@ public class Client
         }
         public void LoopConnect()
         {
+            string ip=ConnectButton.ip!=""?ConnectButton.ip:"127.0.0.1";
+            string portString=ConnectButton.port!=""?ConnectButton.port:"100";
+            int port = Int32.Parse(portString);
+            controller.AddRequest(new Action(()=>controller.SetMessageForPlayer($"{ip}:{port} Connecting...")));
             bool connected=false;
-            int attempts=1;
+            int attempts=0;
             while(connected==false)
             {
-                controller.AddRequest(new Action(()=>controller.SetMessageForPlayer($"Connection attempt: {attempts}")));
                 try
                 {
-                    _clientSocket.Connect(IPAddress.Parse("127.0.0.1"), 100);
+                    _clientSocket.Connect(IPAddress.Parse(ip), port);
                     //_clientSocket.Connect(IPAddress.Parse("25.97.182.10"), 100);
                     controller.AddRequest(new Action(()=>controller.SetMessageForPlayer("Connected. Waiting for other players")));
                     SendMessage("ClientConnected:"+ConnectButton.nick);
@@ -42,6 +45,7 @@ public class Client
                 {
                     attempts++;
                 }
+                controller.AddRequest(new Action(()=>controller.SetMessageForPlayer($"{ip}: Connection attempt: {attempts}")));
             }
         }
 
