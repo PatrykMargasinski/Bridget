@@ -17,7 +17,6 @@ public class TitleScript : MonoBehaviour
     void Change()
     {
         temp++;
-        Debug.Log(sprites[0]);
         i=(i+1)%2;
         gameObject.GetComponent<Image>().sprite=sprites[i];
     }

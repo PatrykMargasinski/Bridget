@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class CardValues : MonoBehaviour
 {
-    static int ace;
     public Player owner;
     public int number;
     public CardSymbol symbol;

@@ -22,12 +22,10 @@ namespace Server
 
         public void SetupServer()
         {
-            // text = File.ReadAllText(@"ip.txt");
             List<string> datas = new List<string>(File.ReadLines(@"ip.txt"));
             IPAddress ip = IPAddress.Parse(datas[0]);
             Console.WriteLine($"Setting up server {ip}:{datas[1]}");
             _serverSocket.Bind(new IPEndPoint(ip, Int32.Parse(datas[1])));
-            //_serverSocket.Bind(new IPEndPoint(IPAddress.Parse("25.97.182.10"), 100));
             _serverSocket.Listen(1);
             Thread acceptThread = new Thread(AcceptLoop);
             acceptThread.Start();
