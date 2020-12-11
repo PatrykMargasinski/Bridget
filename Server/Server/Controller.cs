@@ -83,11 +83,6 @@ namespace Server
                             auctionPhase.GetPartner(auctionPhase.playerWithFirstColor), 
                             auctionPhase.counter, 
                             auctionPhase.recounter);
-                        //mesForGame.Append($"Game starts with contract {gamePhase.bid} for team {gamePhase.declarer}{gamePhase.dummy}");
-                        //if (gamePhase.recounter) mesForGame.Append(" with recounter");
-                        //else if (gamePhase.counter) mesForGame.Append(" with counter");
-                        //mesForGame.Append("\nFirst player is " + gamePhase.declarer);
-                        //server.SendBroadcast(mesForGame.ToString());
                         int counterOrRecounter=0;
                         if (gamePhase.recounter == true) counterOrRecounter = 2;
                         else if (gamePhase.counter == true) counterOrRecounter = 1;

@@ -30,22 +30,6 @@ namespace Server
                 (cards[i], cards[temp]) = (cards[temp], cards[i]);
             }
         }
-        public void PrintThemAll()
-        {
-            foreach(string s in cards)
-            {
-                Console.WriteLine(s);
-            }
-        }
-        public string PrintOneString()
-        {
-            StringBuilder sb = new StringBuilder();
-            foreach (string s in cards)
-            {
-                sb.Append(s);
-            }
-            return sb.ToString();
-        }
         public string Get13Cards()
         {
             List<string> strList = cards.Take(13).ToList();
@@ -57,14 +41,6 @@ namespace Server
                 sb.Append(":"+strList[i]);
             }
             return sb.ToString();
-        }
-        public void DeleteThemAll()
-        {
-            cards.Clear();
-        }
-        public int DeckSize()
-        {
-            return cards.Count;
         }
         class SortComparer : Comparer<string>
         {

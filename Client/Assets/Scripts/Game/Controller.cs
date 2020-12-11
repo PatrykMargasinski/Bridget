@@ -216,6 +216,10 @@ public class Controller : MonoBehaviour
             {
                 SetMessageForPlayer("Scoring");
                 scoring.gameObject.SetActive(true);
+                foreach(Player player in players)
+                {
+                    player.cardToPut.gameObject.SetActive(false);
+                }
                 gamePhase.SetGameInformations($"{mes[1]} has {mes[2]} points {mes[3]} has {mes[4]} points");
                 scoring.nsTeam.text=mes[2];
                 scoring.nsTeam.text=mes[4];

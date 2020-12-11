@@ -14,13 +14,5 @@ namespace Server
             this.nick = nick;
             position = positions.Dequeue();
         }
-        public Player() : this("Noname")
-        {
-        }
-
-        public override string ToString()
-        {
-            return base.ToString();
-        }
     }
 }
