@@ -8,6 +8,7 @@ namespace Server
     class CardDeck
     { 
         List<string> cards=new List<string>();
+
         public void CreateDeck()
         {
             char[] symbols = new char[] { 'S', 'D', 'H', 'C' };
@@ -32,6 +33,7 @@ namespace Server
         }
         public string Get13Cards()
         {
+            if (cards.Count == 0) { CreateDeck(); Shuffle(); }
             List<string> strList = cards.Take(13).ToList();
             cards.RemoveRange(0, 13);
             strList.Sort(new SortComparer());

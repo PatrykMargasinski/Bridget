@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Net.Sockets;
 using System.Linq;
+using System.Threading;
 
 public class Controller : MonoBehaviour
 {
@@ -69,7 +70,6 @@ public class Controller : MonoBehaviour
                 }
                 SetMessageForPlayer("Cards acquired");
                 client.SendMessage("CardsAcquired");
-                TakeScreen();
             }
             else if(mes[0]=="NewPlayerJoined")
             {
@@ -80,6 +80,7 @@ public class Controller : MonoBehaviour
             {
                 int index=1;
                 while(mes[index]!=ConnectButton.nick) index+=2;
+                playerByPosition.Clear();
                 for(int i=0;i<4;i++)
                 {
                     if(index>8)index=1;
@@ -194,7 +195,6 @@ public class Controller : MonoBehaviour
                     bool dummyPartnerCondition=(players[0].position==gamePhase.dummy && mes[2][0]==players[2].position);
                     if(mes[2][0]==players[0].position || mes[2][0]==gamePhase.dummy || dummyPartnerCondition) playerByPosition[mes[2][0]].RemoveOneCard(mes[3]);
                     else playerByPosition[mes[2][0]].RemoveOneCard();
-                    Controller.TakeScreen();
                 }
                 else if(mes[1]=="Winner")
                 {
@@ -225,7 +225,7 @@ public class Controller : MonoBehaviour
                 scoring.nsTeam.text=mes[4];
                 Debug.Log($"Team: {mes[1]} have {mes[2]} points");
                 Debug.Log($"Team: {mes[3]} have {mes[4]} points");
-                Controller.TakeScreen();
+                client.SendMessage("PlayAgain");
             }
     }
 
