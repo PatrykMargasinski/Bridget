@@ -5,15 +5,23 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System.IO;
 using UnityEngine;
 
 public class Client
 {
+    
     private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
     private Controller controller;
 
+    private string textFileName;
+
         public Client(Controller con)
         {
+        
+            var date=DateTime.Now.ToString().Replace(":"," ");
+            textFileName=$"GameLogs/SpyOfTheDay{date}.txt";
+            using (StreamWriter sw = File.CreateText(textFileName))
             controller=con;
         }
 
@@ -57,8 +65,13 @@ public class Client
 
         public void SendMessage(string req)
         {
-            byte[] buffer = Encoding.ASCII.GetBytes(req);
+            byte[] buffer = Encoding.UTF8.GetBytes(req);
             _clientSocket.Send(buffer);
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(textFileName),true))
+            {
+                    outputFile.WriteLine("Send:"+req);
+            }
+
         }
 
         public void GetMessage()
@@ -70,8 +83,12 @@ public class Client
                     int rec = _clientSocket.Receive(receivedBuf);
                     byte[] data = new byte[rec];
                     Array.Copy(receivedBuf, data, rec);
-                    string mes=Encoding.ASCII.GetString(data);
+                    string mes=Encoding.UTF8.GetString(data);
                     controller.AddRequest(new Action(()=>controller.Reaction(_clientSocket,mes)));
+                                using (StreamWriter outputFile = new StreamWriter(Path.Combine(textFileName),true))
+                                {
+                                        outputFile.WriteLine("Got:"+mes);
+                                }
                 }
             }
             catch(SocketException)

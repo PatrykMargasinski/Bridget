@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Net.Sockets;
 using System.Linq;
-using System.Threading;
 
 public class Controller : MonoBehaviour
 {
@@ -89,6 +88,7 @@ public class Controller : MonoBehaviour
                     index+=2;
                 }
                 foreach(char s in playerByPosition.Keys) Debug.Log(s);
+                players[2].playerText.text+=" (partner)";
 
             }
             else if(mes[0]=="Bidding")
@@ -215,16 +215,18 @@ public class Controller : MonoBehaviour
             else if(mes[0]=="Score")
             {
                 SetMessageForPlayer("Scoring");
-                scoring.gameObject.SetActive(true);
+                //scoring.gameObject.SetActive(true);
                 foreach(Player player in players)
                 {
                     player.cardToPut.gameObject.SetActive(false);
                 }
-                gamePhase.SetGameInformations($"{mes[1]} has {mes[2]} points {mes[3]} has {mes[4]} points");
-                scoring.nsTeam.text=mes[2];
-                scoring.nsTeam.text=mes[4];
-                Debug.Log($"Team: {mes[1]} have {mes[2]} points");
-                Debug.Log($"Team: {mes[3]} have {mes[4]} points");
+                StringBuilder score=new StringBuilder("");
+                foreach(string str in mes.Skip(1))
+                {
+                    score.Append(" "+str);
+                }
+                score.Remove(0,1);
+                gamePhase.SetGameInformations(score.ToString());
                 client.SendMessage("PlayAgain");
             }
     }

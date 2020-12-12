@@ -13,7 +13,8 @@ namespace Server
         Server server;
         public Mutex mutex = new Mutex();
         List<Player> players = new List<Player>();
-        List<string> playersNicks = new List<string>();
+        List<Player> playersGeneral = new List<Player>();
+        List<int> playersPoints = new List<int>();
         Dictionary<char, Player> playersByPosition = new Dictionary<char, Player>();
         AuctionPhase auctionPhase;
         GamePhase gamePhase;
@@ -43,9 +44,10 @@ namespace Server
             string[] mes = message.Split(':');
             if (mes[0] == "ClientConnected")
             {
-                playersNicks.Add(mes[1]);
-                server.clientByNick.Add(playersNicks[^1], socket);
-                server.SendBroadcast("NewPlayerJoined:" + playersNicks[^1]);
+                playersGeneral.Add(new Player(mes[1]));
+                playersPoints.Add(0);
+                server.clientByNick.Add(playersGeneral[^1].nick, socket);
+                server.SendBroadcast("NewPlayerJoined:" + playersGeneral[^1].nick);
                 if (server.GetNumberOfClients() == 4)
                 {
                     SetPlayerByConfiguration(playerConfigurations.GetConfiguration());
@@ -186,7 +188,24 @@ namespace Server
                         {
                             Score scoreInstance = new Score(gamePhase.bid, gamePhase.gotTricks, gamePhase.counter, gamePhase.recounter);
                             int score = scoreInstance.GetScore();
-                            server.SendBroadcast($"Score:{gamePhase.GetContractTeam()}:{(score >= 0 ? score : 0)}:{gamePhase.GetDefenders()}:{(score < 0 ? -score : 0)}");
+
+                            if(score>0)
+                            {
+                                foreach (char player in gamePhase.GetContractTeam()) playersByPosition[player].score += score;
+                            }
+                            else
+                            {
+                                foreach (char player in gamePhase.GetDefenders()) playersByPosition[player].score += -score;
+                            }
+                            StringBuilder sb = new StringBuilder("Score:");
+                            foreach(Player pl in playersGeneral)
+                            {
+                                sb.Append($" {pl.nick} {pl.score}");
+                            }
+
+                            server.SendBroadcast($"Score:{sb.ToString()}");
+
+                            //server.SendBroadcast($"Score:{gamePhase.GetContractTeam()}:{(score >= 0 ? score : 0)}:{gamePhase.GetDefenders()}:{(score < 0 ? -score : 0)}");
                             Console.WriteLine($"Bid, gottricks,counter,recounter: {gamePhase.bid}, {gamePhase.gotTricks}, {gamePhase.counter}, {gamePhase.recounter}");
                             Console.WriteLine(score);
                             temp = 0;
@@ -207,6 +226,10 @@ namespace Server
                 if (temp == 4)
                 {
                     temp = 0;
+                    SetPlayerByConfiguration(playerConfigurations.GetConfiguration());
+                    SetPositions();
+                    SendPlayersNicksAndPositions();
+                    Console.WriteLine("Game starts again. Sending cards");
                     SendCards();
                 }
             }
@@ -247,9 +270,10 @@ namespace Server
 
         public void SetPlayerByConfiguration(int [] conf)
         {
+            players.Clear();
             foreach(int index in conf)
             {
-                players.Add(new Player(playersNicks[index]));
+                players.Add(playersGeneral[index]);
             }
         }
     }

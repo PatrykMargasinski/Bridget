@@ -52,21 +52,21 @@ namespace Server
                 int rec = socket.Receive(receivedBuf);
                 byte[] data = new byte[rec];
                 Array.Copy(receivedBuf, data, rec);
-                string text = Encoding.ASCII.GetString(data);
+                string text = Encoding.UTF8.GetString(data);
                 Console.WriteLine("From " + socket.RemoteEndPoint + ": " + text);
                 controller.Reaction(socket,text);
             }
         }
         public void SendMessage(Socket s, string req)
         {
-            byte[] buffer = Encoding.ASCII.GetBytes(req);
+            byte[] buffer = Encoding.UTF8.GetBytes(req);
             Console.WriteLine("Sending to "+s.RemoteEndPoint.ToString()+": " + req);
             s.Send(buffer);
         }
         public void SendBroadcast(string req)
         {
             Console.WriteLine("Send Broadcast: "+ req);
-            byte[] buffer = Encoding.ASCII.GetBytes(req);
+            byte[] buffer = Encoding.UTF8.GetBytes(req);
             foreach(Socket s in _clientSockets)
             s.Send(buffer);
         }

@@ -8,9 +8,11 @@ namespace Server
     {
         public string nick;
         public char position;
+        public int score;
         public Player(string nick)
         {
             this.nick = nick;
+            score = 0;
         }
     }
 }
