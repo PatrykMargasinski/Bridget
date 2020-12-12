@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Server
 {
-    class CardDeck
+    public class CardDeck
     { 
         List<string> cards=new List<string>();
 
@@ -19,8 +19,8 @@ namespace Server
                     cards.Add(i.ToString() + sym);
                 }
             }
-
         }
+
         public void Shuffle()
         {
             Random ran = new Random();
@@ -44,6 +44,17 @@ namespace Server
             }
             return sb.ToString();
         }
+
+        public int Length()
+        {
+            return cards.Count;
+        }
+
+        public string Get(int i)
+        {
+            return cards[i];
+        }
+
         class SortComparer : Comparer<string>
         {
             public override int Compare(string x, string y)

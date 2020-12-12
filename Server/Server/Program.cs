@@ -6,8 +6,8 @@ namespace Server
     {
         static void Main(string[] args)
         {
-           Controller controller = new Controller();
-           controller.Start();
+            Controller controller = new Controller();
+            controller.Start();
         }
 
         static void CurrentDomain_ProcessExit(object sender, EventArgs e)

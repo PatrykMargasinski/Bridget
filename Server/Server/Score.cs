@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Server
 {
-    class Score
+    public class Score
     {
         string trump;
         int contractTricks;

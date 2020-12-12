@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Server
 {
-    class AuctionPhase
+    public class AuctionPhase
     {
         private int currentPlayer;
         public char[] players = new char[] { 'S', 'E', 'N', 'W' };

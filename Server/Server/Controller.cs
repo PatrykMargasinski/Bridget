@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Server
 {
-    class Controller
+    public class Controller
     {
         CardDeck cd;
         Server server;
@@ -18,7 +18,7 @@ namespace Server
         Dictionary<char, Player> playersByPosition = new Dictionary<char, Player>();
         AuctionPhase auctionPhase;
         GamePhase gamePhase;
-        PlayersConfigurations playerConfigurations;
+        PlayersConfigurations playerConfigurations = new PlayersConfigurations();
         int temp = 0;
 
 
@@ -26,7 +26,6 @@ namespace Server
         {
             cd = new CardDeck();
             server = new Server(this);
-            playerConfigurations = new PlayersConfigurations(this);
         }
 
         public void Start()
@@ -165,11 +164,11 @@ namespace Server
                 {
                     Console.WriteLine($"Got from {mes[2]} card {mes[3]}");
                     server.SendBroadcast($"GamePhase:MoveDone:{mes[2]}:{mes[3]}");
-                    if (gamePhase.requiredColor == '0') gamePhase.requiredColor = mes[3][^1];
+                    if (gamePhase.GetRequiredColor() == '0') gamePhase.SetRequiredColor(mes[3][^1]);
                     gamePhase.moves.Add(mes[3], mes[2][0]);
                     if (gamePhase.moves.Count < 4)
                     {
-                        server.SendBroadcast($"GamePhase:Move:{gamePhase.GetNext()}:{gamePhase.requiredColor}");
+                        server.SendBroadcast($"GamePhase:Move:{gamePhase.GetNext()}:{gamePhase.GetRequiredColor()}");
                     }
                     else if (gamePhase.moves.Count == 4)
                     {
@@ -178,7 +177,7 @@ namespace Server
                         if (gotTrick == 1) gamePhase.gotTricks++;
                         server.SendBroadcast($"GamePhase:Winner:{gotTrick}:{winner}");
                         gamePhase.currentPlayer = gamePhase.GetIndex(winner);
-                        gamePhase.requiredColor = '0';
+                        gamePhase.SetRequiredColor('0');
                         Thread.Sleep(1000);
                         gamePhase.tricks--;
                         Console.WriteLine("Tricks: " + gamePhase.tricks);
@@ -189,7 +188,7 @@ namespace Server
                             Score scoreInstance = new Score(gamePhase.bid, gamePhase.gotTricks, gamePhase.counter, gamePhase.recounter);
                             int score = scoreInstance.GetScore();
 
-                            if(score>0)
+                            if (score > 0)
                             {
                                 foreach (char player in gamePhase.GetContractTeam()) playersByPosition[player].score += score;
                             }
@@ -198,7 +197,7 @@ namespace Server
                                 foreach (char player in gamePhase.GetDefenders()) playersByPosition[player].score += -score;
                             }
                             StringBuilder sb = new StringBuilder("Score:");
-                            foreach(Player pl in playersGeneral)
+                            foreach (Player pl in playersGeneral)
                             {
                                 sb.Append($" {pl.nick} {pl.score}");
                             }
@@ -233,6 +232,7 @@ namespace Server
                     SendCards();
                 }
             }
+            else throw new ArgumentException($"Unknown message:{mes[0]}");
             mutex.ReleaseMutex();
         }
 

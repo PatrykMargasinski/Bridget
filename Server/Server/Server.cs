@@ -8,7 +8,7 @@ using System.IO;
 
 namespace Server
 {
-    class Server
+    public class Server
     {
         private List<Socket> _clientSockets = new List<Socket>();
         public Dictionary<char, Socket> clientByPosition = new Dictionary<char, Socket>();

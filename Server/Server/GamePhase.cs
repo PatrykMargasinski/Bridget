@@ -6,14 +6,14 @@ using System.Text;
 
 namespace Server
 {
-    class GamePhase
+    public class GamePhase : IGamePhase
     {
         public string bid;
         public char declarer;
         public char dummy;
         public bool counter=false;
         public bool recounter=false;
-        public char requiredColor = '0';
+        private char requiredColor = '0';
         public int gotTricks = 0;
         public int tricks = 0;
 
@@ -45,7 +45,7 @@ namespace Server
             return temp;
         }
 
-        public void ComparerInit()
+        private void ComparerInit()
         {
             string[] temp = bid.Split(":");
             comparer = new CardComparer(temp[1],this);
@@ -77,6 +77,14 @@ namespace Server
             Console.WriteLine("Atut: " + temp[1]);
             Console.WriteLine("Winner: "+max);
             return moves[max];
+        }
+        public void SetRequiredColor(char color)
+        {
+            requiredColor = color;
+        }
+        public char GetRequiredColor()
+        {
+            return requiredColor;
         }
     }
 }
