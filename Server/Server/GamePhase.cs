@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Text;
 
 namespace Server
@@ -15,11 +14,11 @@ namespace Server
         public bool recounter=false;
         private char requiredColor = '0';
         public int gotTricks = 0;
-        public int tricks = 0;
-
+        public int lostTricks = 0;
+        public int tricks = 13;
         public char[] players = new char[] { 'S', 'E', 'N', 'W' };
         public int currentPlayer;
-        CardComparer comparer;
+        private CardComparer comparer;
         public Dictionary<string, char> moves = new Dictionary<string, char>();
         public GamePhase(string bid, char declarer, char dummy, char counter, char recounter)
         {
@@ -29,7 +28,6 @@ namespace Server
             if (recounter != '0') this.recounter = true;
             else if (counter != '0') this.counter = true;
             currentPlayer = GetIndex(declarer);
-            tricks = 13;
             ComparerInit();
         }
 
@@ -48,7 +46,7 @@ namespace Server
         private void ComparerInit()
         {
             string[] temp = bid.Split(":");
-            comparer = new CardComparer(temp[1],this);
+            comparer = new CardComparer(temp[1]);
         }
 
         public int GetIndex(char player)
@@ -81,6 +79,7 @@ namespace Server
         public void SetRequiredColor(char color)
         {
             requiredColor = color;
+            comparer.requiredColor = color;
         }
         public char GetRequiredColor()
         {

@@ -6459,7 +6459,6 @@ GameObject:
   - component: {fileID: 2095197357}
   - component: {fileID: 2095197359}
   - component: {fileID: 2095197360}
-  - component: {fileID: 2095197361}
   m_Layer: 0
   m_Name: GameController
   m_TagString: Untagged
@@ -6551,21 +6550,7 @@ MonoBehaviour:
   gameInformations: {fileID: 113471882}
   bid: 
   tricks: 0
---- !u!114 &2095197361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2095197356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ea4c20292b6d424fa49382bf2b09ec2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  score: {fileID: 1339738055}
-  nsTeam: {fileID: 141320179}
-  weTeam: {fileID: 983945538}
+  lostTricks: 0
 --- !u!1 &2105844946
 GameObject:
   m_ObjectHideFlags: 0
@@ -7084,7 +7069,7 @@ PrefabInstance:
     - target: {fileID: 8748126924684373931, guid: 47f9fe0454b191d49a333235bfcc1819,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8748126924684373931, guid: 47f9fe0454b191d49a333235bfcc1819,
         type: 3}
@@ -7134,7 +7119,7 @@ PrefabInstance:
     - target: {fileID: 8748126924684373931, guid: 47f9fe0454b191d49a333235bfcc1819,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8748126924684373931, guid: 47f9fe0454b191d49a333235bfcc1819,
         type: 3}
@@ -7149,7 +7134,7 @@ PrefabInstance:
     - target: {fileID: 8748126924684373931, guid: 47f9fe0454b191d49a333235bfcc1819,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8748126924684373931, guid: 47f9fe0454b191d49a333235bfcc1819,
         type: 3}
@@ -7174,7 +7159,7 @@ PrefabInstance:
     - target: {fileID: 8748126924684373931, guid: 47f9fe0454b191d49a333235bfcc1819,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 180
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8748126924684373935, guid: 47f9fe0454b191d49a333235bfcc1819,
         type: 3}
@@ -7249,7 +7234,7 @@ PrefabInstance:
     - target: {fileID: 9095362226178955426, guid: d416b5f73e2081f4d89aecbd8ccbdd43,
         type: 3}
       propertyPath: m_Name
-      value: Background
+      value: GamePhaseCards
       objectReference: {fileID: 0}
     - target: {fileID: 9095362226178955427, guid: d416b5f73e2081f4d89aecbd8ccbdd43,
         type: 3}

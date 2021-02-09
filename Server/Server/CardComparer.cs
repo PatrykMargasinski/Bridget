@@ -6,14 +6,13 @@ namespace Server
 {
     public class CardComparer : Comparer<string>
     {
-        public CardComparer(string trump, IGamePhase gamePhase)
+        public char requiredColor;
+        public CardComparer(string trump)
         {
             if (trump != "BA") this.trump = trump[0];
             else this.trump = '0';
-            gm = gamePhase;
         }
         private char trump;
-        IGamePhase gm;
         public override int Compare(string x, string y)
         {
             if (Color(x) == trump && Color(y) == trump) return Number(x).CompareTo(Number(y));
@@ -21,9 +20,9 @@ namespace Server
             else if (Color(y) == trump) return -1;
             else
             {
-                if (Color(x) == gm.GetRequiredColor() && Color(y) == gm.GetRequiredColor()) return Number(x).CompareTo(Number(y));
-                else if (Color(x) == gm.GetRequiredColor()) return 1;
-                else if (Color(y) == gm.GetRequiredColor()) return -1;
+                if (Color(x) == requiredColor && Color(y) == requiredColor) return Number(x).CompareTo(Number(y));
+                else if (Color(x) == requiredColor) return 1;
+                else if (Color(y) == requiredColor) return -1;
                 { 
                     if (Number(x) != Number(y)) return Number(x).CompareTo(Number(y));
                     else return Color(x).CompareTo(Color(y));

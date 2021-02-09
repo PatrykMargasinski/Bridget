@@ -16,7 +16,10 @@ namespace ServerTest
         {
             gamePhaseMock = new Mock<IGamePhase>();
             gamePhaseMock.Setup(e => e.GetRequiredColor()).Returns('D');
-            cardComparer = new CardComparer("C", gamePhaseMock.Object);
+            cardComparer = new CardComparer("C")
+            {
+                requiredColor = 'D'
+            };
         }
 
         [Test]
@@ -24,13 +27,6 @@ namespace ServerTest
         {
             string card1 = "4C";
             string card2 = "5C";
-            Assert.IsTrue(cardComparer.Compare(card1, card2) < 0);
-        }
-        [Test]
-        public void CheckComparingCardsWithTheSameNumberWithoutTrumpColor()
-        {
-            string card1 = "5H";
-            string card2 = "5S";
             Assert.IsTrue(cardComparer.Compare(card1, card2) < 0);
         }
         [Test]

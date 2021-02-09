@@ -12,17 +12,17 @@ namespace Server
         public int passCount = 0;
         public char counter = '0';
         public char recounter = '0';
-        public char playerWithFirstColor = '0';
+        public char declarer = '0';
         public string firstColor = "0";
-
         public string bid = "0:BA";
+
         public AuctionPhase(char firstPlayer)
         {
             if (!players.Contains(firstPlayer)) throw new Exception("There is no player called " + firstPlayer);
             int index = 0;
             while (players[index] != firstPlayer) index++;
             currentPlayer = index-1;
-            playerWithFirstColor = firstPlayer;
+            declarer = firstPlayer;
         }
         public char GetNext()
         {

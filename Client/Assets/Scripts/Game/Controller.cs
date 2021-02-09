@@ -1,4 +1,4 @@
-﻿using System.Text;
+using System.Text;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,16 +12,11 @@ public class Controller : MonoBehaviour
     public Text messageForPlayer;
     public Player[] players;
     public Dictionary<char,Player> playerByPosition=new Dictionary<char, Player>();
-    private Queue<Action> requestQueue = new Queue<Action>();
+    //private Queue<Action> requestQueue = new Queue<Action>();
     public AuctionPhase auctionPhase;
     public GamePhase gamePhase;
     public Scoring scoring;
     static public int screenNumber=0;
-    static public void TakeScreen()
-    {
-        ScreenCapture.CaptureScreenshot(ConnectButton.nick+screenNumber.ToString()+".png");
-        screenNumber++;
-    }
     void Start()
     {
         players=new Player[4];
@@ -30,14 +25,15 @@ public class Controller : MonoBehaviour
         auctionPhase=gameObject.GetComponent<AuctionPhase>();
         gamePhase=gameObject.GetComponent<GamePhase>();
         scoring=gameObject.GetComponent<Scoring>();
-        client=new Client(this);
+        client=new Client();
         client.SetupClient();
     } 
     void Update()
     {
-        if(requestQueue.Count!=0)
+        if(client.requestQueue.Count!=0)
         {
-            requestQueue.Dequeue().Invoke();
+            var mesPair = client.requestQueue.Dequeue();
+            Reaction(mesPair.Item1,mesPair.Item2);
         }
     }
 
@@ -45,16 +41,11 @@ public class Controller : MonoBehaviour
     {
         players[0]=GameObject.Find("MyCards").GetComponent<Player>();
         players[1]=GameObject.Find("EnemyBoard2").GetComponent<Player>();
-        //players[1].SetAngle(1);
+        players[1].SetAngle(1);
         players[2]=GameObject.Find("PartnerCards").GetComponent<Player>();
         players[3]=GameObject.Find("EnemyBoard1").GetComponent<Player>();
-       // players[3].SetAngle(2);
+        players[3].SetAngle(2);
        foreach(Player pl in players) pl.controller=this;
-    }
-
-    public void AddRequest(Action action)
-    {
-        requestQueue.Enqueue(action);
     }
 
     public void Reaction(Socket socket, string message)
@@ -87,9 +78,12 @@ public class Controller : MonoBehaviour
                     playerByPosition.Add(mes[index+1][0],players[i]);
                     index+=2;
                 }
-                foreach(char s in playerByPosition.Keys) Debug.Log(s);
                 players[2].playerText.text+=" (partner)";
 
+            }
+            else if(mes[0]=="MessageForPlayer")
+            {
+                SetMessageForPlayer(mes[1].Replace(';',':'));
             }
             else if(mes[0]=="Bidding")
             {
@@ -133,10 +127,11 @@ public class Controller : MonoBehaviour
                     int ind=0;
                     foreach(string mess in mes)
                     {
-                        Debug.Log(ind+""+mess);
                         ind++;
                     }
-                    gamePhase.SetGameInformations($"Contract is {mes[3]} for team {mes[4]}{counterRecounter}. Dummy is {mes[2]}. Got tricks: 0");
+                    gamePhase.SetGameInformations($"Contract is {mes[3]} for {mes[4]}{counterRecounter}. {mes[2]} is dummy. Got/Lost tricks: 0/0");
+                    gamePhase.tricks=0;
+                    gamePhase.lostTricks=0;
                 }
                 else if(mes[1]=="DummyCards")
                 {
@@ -203,13 +198,14 @@ public class Controller : MonoBehaviour
                     {
                         gamePhase.tricks++;
                         SetMessageForPlayer($"Trick acquired by player {mes[3]}");
-                        gamePhase.ChangeTrickNumber();
                     }
                     else if(gotTrick==0)
                     {
+                        gamePhase.lostTricks++;
                         SetMessageForPlayer("Trick lost");
                     }
                     else throw new Exception("Is there or not a trick?");
+                    gamePhase.ChangeTrickNumber();
                 }
             }
             else if(mes[0]=="Score")
@@ -229,6 +225,11 @@ public class Controller : MonoBehaviour
                 gamePhase.SetGameInformations(score.ToString());
                 client.SendMessage("PlayAgain");
             }
+            else if(mes[0]=="Endgame")
+            {
+                SetMessageForPlayer("The game has ended");
+            }
+
     }
 
     public void OnApplicationQuit()
@@ -238,7 +239,6 @@ public class Controller : MonoBehaviour
 
     public void SetMessageForPlayer(string message)
     {
-        Debug.Log(message);
         messageForPlayer.text=message;
     }
 

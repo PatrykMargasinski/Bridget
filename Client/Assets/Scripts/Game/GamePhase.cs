@@ -11,6 +11,7 @@ public class GamePhase : MonoBehaviour
     public Text gameInformations;
     public string bid;
     public int tricks=0;
+    public int lostTricks=0;
     void Start()
     {
         controller=gameObject.GetComponent<Controller>();
@@ -27,13 +28,16 @@ public class GamePhase : MonoBehaviour
         Player player=dummyMove?controller.players[2]:controller.players[0];
         dummyMove=false;
         controller.client.SendMessage($"GamePhase:Move:{player.position}:{card}");
-        if(controller.players[0].cards.Count==0)
-            controller.client.SendMessage("GamePhase:NoCards");
     }
 
     public void ChangeTrickNumber()
     {
+        int i=gameInformations.text.IndexOf("Got");
+        string temp=(gameInformations.text.Substring(0,i)+$"Got/Lost tricks:{tricks}/{lostTricks}");
+        SetGameInformations(temp);
+        /*
         string[] temp = gameInformations.text.Split(':');
         SetGameInformations($"{temp[0]}:{tricks}");
+        */
     }
 }

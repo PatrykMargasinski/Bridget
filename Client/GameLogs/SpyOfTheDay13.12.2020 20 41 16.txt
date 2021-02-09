@@ -1,0 +1,2 @@
+Send:ClientConnected:WFWA
+Got:NewPlayerJoined:WFWA

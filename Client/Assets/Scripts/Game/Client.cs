@@ -5,24 +5,18 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
-using System.IO;
+
 using UnityEngine;
 
 public class Client
-{
-    
+{   
     private Socket _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-    private Controller controller;
+    public Queue<(Socket,string)> requestQueue=new Queue<(Socket,string)>();
 
-    private string textFileName;
-
-        public Client(Controller con)
+        public Client()
         {
         
             var date=DateTime.Now.ToString().Replace(":"," ");
-            textFileName=$"GameLogs/SpyOfTheDay{date}.txt";
-            using (StreamWriter sw = File.CreateText(textFileName))
-            controller=con;
         }
 
         public void SetupClient()
@@ -35,7 +29,9 @@ public class Client
             string ip=ConnectButton.ip!=""?ConnectButton.ip:"127.0.0.1";
             string portString=ConnectButton.port!=""?ConnectButton.port:"100";
             int port = Int32.Parse(portString);
-            controller.AddRequest(new Action(()=>controller.SetMessageForPlayer($"{ip}:{port} Connecting...")));
+            //controller.AddRequest(new Action(()=>controller.SetMessageForPlayer($"{ip}:{port} Connecting...")));
+            AddRequest(_clientSocket,$"MessageForPlayer:{ip};{port} Connecting...");
+            Debug.Log("He");
             bool connected=false;
             int attempts=0;
             while(connected==false)
@@ -43,8 +39,8 @@ public class Client
                 try
                 {
                     _clientSocket.Connect(IPAddress.Parse(ip), port);
-                    //_clientSocket.Connect(IPAddress.Parse("25.97.182.10"), 100);
-                    controller.AddRequest(new Action(()=>controller.SetMessageForPlayer("Connected. Waiting for other players")));
+                    //controller.AddRequest(new Action(()=>controller.SetMessageForPlayer("Connected. Waiting for other players")));
+                    AddRequest(_clientSocket,"MessageForPlayer:Connected. Waiting for other players");
                     SendMessage("ClientConnected:"+ConnectButton.nick);
                     connected=true;
                     LoopGetMessage();
@@ -53,7 +49,8 @@ public class Client
                 {
                     attempts++;
                 }
-                controller.AddRequest(new Action(()=>controller.SetMessageForPlayer($"{ip}: Connection attempt: {attempts}")));
+                //controller.AddRequest(new Action(()=>controller.SetMessageForPlayer($"{ip}: Connection attempt: {attempts}")));
+                AddRequest(_clientSocket,$"MessageForPlayer:{ip};{port} Connection attempt; {attempts}");
             }
         }
 
@@ -67,11 +64,6 @@ public class Client
         {
             byte[] buffer = Encoding.UTF8.GetBytes(req);
             _clientSocket.Send(buffer);
-            using (StreamWriter outputFile = new StreamWriter(Path.Combine(textFileName),true))
-            {
-                    outputFile.WriteLine("Send:"+req);
-            }
-
         }
 
         public void GetMessage()
@@ -84,21 +76,25 @@ public class Client
                     byte[] data = new byte[rec];
                     Array.Copy(receivedBuf, data, rec);
                     string mes=Encoding.UTF8.GetString(data);
-                    controller.AddRequest(new Action(()=>controller.Reaction(_clientSocket,mes)));
-                                using (StreamWriter outputFile = new StreamWriter(Path.Combine(textFileName),true))
-                                {
-                                        outputFile.WriteLine("Got:"+mes);
-                                }
+                    //controller.AddRequest(new Action(()=>controller.Reaction(_clientSocket,mes)));
+                    AddRequest(_clientSocket,mes);
+                    Debug.Log("Get message: "+mes);
                 }
             }
             catch(SocketException)
             {
-                controller.AddRequest(new Action(()=>controller.SetMessageForPlayer("Connection problem")));
+                //controller.AddRequest(new Action(()=>controller.SetMessageForPlayer("Connection problem")));
+                AddRequest(_clientSocket,"MessageForPlayer:Connection problem");
             }
         }
         public void Disconnect()
         {
             Debug.Log("Disconnect");
             if(_clientSocket.Connected)_clientSocket.Disconnect(false);
+        }
+
+        public void AddRequest(Socket soc, string mes)
+        {
+            requestQueue.Enqueue((soc,mes));
         }
 }

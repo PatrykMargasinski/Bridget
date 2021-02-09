@@ -36,6 +36,7 @@ public class CardValues : MonoBehaviour
         {
             cardWithoutRaycast.sprite=CardSprites.sprites[ToString()];
             cardWithoutRaycast.transform.position=this.transform.position;
+            cardWithoutRaycast.transform.rotation=this.transform.rotation;
             cardWithoutRaycast.gameObject.SetActive(true);
         }
     }

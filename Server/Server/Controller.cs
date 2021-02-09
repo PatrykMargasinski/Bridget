@@ -20,6 +20,7 @@ namespace Server
         GamePhase gamePhase;
         PlayersConfigurations playerConfigurations = new PlayersConfigurations();
         int temp = 0;
+        int playedDeals = 0;
 
 
         public Controller()
@@ -67,7 +68,10 @@ namespace Server
                 {
                     SendPlayersNicksAndPositions();
                     auctionPhase = new AuctionPhase('N');
-                    server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:0:BA:Auction phase started: ");
+                    StringBuilder mesToSend=new StringBuilder($"Bidding:{auctionPhase.GetNext()}:0:BA:Auction phase started");
+                    if (playerConfigurations.GetVulnerable() == "both") mesToSend.Append(". Both teams vulnerable");
+                    else if (playerConfigurations.GetVulnerable() != "0") mesToSend.Append($". {playerConfigurations.GetVulnerable()} vulnerable");
+                    server.SendBroadcast(mesToSend.ToString()+": ");
                 }
             }
             else if (mes[0] == "Bidding")
@@ -82,11 +86,11 @@ namespace Server
                         //bid - auctionPhase.bid np. 2:C
                         //team {auctionPhase.GetNext/Current(), GetPartner() np N/S
                         //auctionPhase.counter/recounter
-                        //first player - playerWithFirstColor
+                        //first player - declarer
                         gamePhase = new GamePhase
                             (auctionPhase.bid,
-                            auctionPhase.playerWithFirstColor,
-                            auctionPhase.GetPartner(auctionPhase.playerWithFirstColor),
+                            auctionPhase.declarer,
+                            auctionPhase.GetPartner(auctionPhase.declarer),
                             auctionPhase.counter,
                             auctionPhase.recounter);
                         int counterOrRecounter = 0;
@@ -118,7 +122,7 @@ namespace Server
                     if (auctionPhase.firstColor != mes[4])
                     {
                         auctionPhase.firstColor = mes[4];
-                        auctionPhase.playerWithFirstColor = mes[1][0];
+                        auctionPhase.declarer = mes[1][0];
                     }
                     auctionPhase.bid = mes[3] + ":" + mes[4];
                     server.SendBroadcast($"Bidding:{auctionPhase.GetNext()}:{auctionPhase.bid}:{mes[1]}:bid {mes[3]}{mes[4]}");
@@ -157,6 +161,7 @@ namespace Server
                     {
                         temp = 0;
                         server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}:0");
+                        gamePhase.tricks = 13;
                     }
                     else if (temp > 4) throw new Exception("5 players? Really?");
                 }
@@ -185,9 +190,10 @@ namespace Server
                             server.SendBroadcast($"GamePhase:Move:{gamePhase.GetCurrent()}:0");
                         else
                         {
-                            Score scoreInstance = new Score(gamePhase.bid, gamePhase.gotTricks, gamePhase.counter, gamePhase.recounter);
+                            Score scoreInstance = new Score(gamePhase.bid, gamePhase.gotTricks, gamePhase.counter, 
+                                gamePhase.recounter,gamePhase.GetContractTeam(), GetVulnerableTeam());
+                            playerConfigurations.SetNextVulnerable();
                             int score = scoreInstance.GetScore();
-
                             if (score > 0)
                             {
                                 foreach (char player in gamePhase.GetContractTeam()) playersByPosition[player].score += score;
@@ -202,10 +208,11 @@ namespace Server
                                 sb.Append($" {pl.nick} {pl.score}");
                             }
 
-                            server.SendBroadcast($"Score:{sb.ToString()}");
+                            server.SendBroadcast($"Score:{sb}");
 
                             //server.SendBroadcast($"Score:{gamePhase.GetContractTeam()}:{(score >= 0 ? score : 0)}:{gamePhase.GetDefenders()}:{(score < 0 ? -score : 0)}");
-                            Console.WriteLine($"Bid, gottricks,counter,recounter: {gamePhase.bid}, {gamePhase.gotTricks}, {gamePhase.counter}, {gamePhase.recounter}");
+                            Console.WriteLine($"Bid, gottricks,counter,recounter: {gamePhase.bid}, {gamePhase.gotTricks}, " +
+                                $"{gamePhase.counter}, {gamePhase.recounter}");
                             Console.WriteLine(score);
                             temp = 0;
                         }
@@ -225,11 +232,20 @@ namespace Server
                 if (temp == 4)
                 {
                     temp = 0;
-                    SetPlayerByConfiguration(playerConfigurations.GetConfiguration());
-                    SetPositions();
-                    SendPlayersNicksAndPositions();
-                    Console.WriteLine("Game starts again. Sending cards");
-                    SendCards();
+                    playedDeals++;
+                    if (playedDeals != 4)
+                    {
+                        SetPlayerByConfiguration(playerConfigurations.GetConfiguration());
+                        SetPositions();
+                        SendPlayersNicksAndPositions();
+                        gamePhase.tricks = 0;
+                        Console.WriteLine("Game starts again. Sending cards");
+                        SendCards();
+                    }
+                    else
+                    {
+                        server.SendBroadcast("Endgame");
+                    }
                 }
             }
             else throw new ArgumentException($"Unknown message:{mes[0]}");
@@ -275,6 +291,18 @@ namespace Server
             {
                 players.Add(playersGeneral[index]);
             }
+        }
+
+        public string GetVulnerableTeam()
+        {
+            return playedDeals switch
+            {
+                0 => "0",
+                1 => "NS",
+                2 => "WE",
+                3 => "both",
+                _ => "0",
+            };
         }
     }
 }

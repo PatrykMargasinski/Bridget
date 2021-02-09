@@ -1,0 +1,176 @@
+Send:ClientConnected:A
+Got:NewPlayerJoined:A
+Got:NewPlayerJoined:B
+Got:NewPlayerJoined:C
+Got:NewPlayerJoined:D
+Got:Cards:2C:14C:4D:5D:12D:14D:10H:12H:14H:8S:9S:13S:14S
+Send:CardsAcquired
+Got:Players:A:N:B:W:C:S:D:E
+Got:Bidding:N:0:BA:Auction phase started: 
+Send:Bidding:N:Bid:1:C
+Got:Bidding:W:1:C:N:bid 1C
+Got:Bidding:S:1:C:W:passed
+Got:Bidding:E:1:C:S:passed
+Send:GamePhase:PartnerCards:2C:14C:4D:5D:12D:14D:10H:12H:14H:8S:9S:13S:14S
+Got:GamePhase:Initialization:S:1C:NS:0
+Got:GamePhase:DummyCards:3C:5C:6C:7C:8C:9C:7D:8D:9D:11D:5H:9H:3S
+Got:GamePhase:Move:N:0
+Send:GamePhase:ReadyToPlay
+Send:GamePhase:Move:N:14S: NoCards
+Got:GamePhase:MoveDone:N:14S
+Got:GamePhase:Move:W:S
+Got:GamePhase:MoveDone:W:7S
+Got:GamePhase:Move:S:S
+Send:GamePhase:Move:S:3S: NoCards
+Got:GamePhase:MoveDone:S:3S
+Got:GamePhase:Move:E:S
+Got:GamePhase:MoveDone:E:11S
+Got:GamePhase:Winner:1:N
+Got:GamePhase:Move:N:0
+Send:GamePhase:Move:N:13S: NoCards
+Got:GamePhase:MoveDone:N:13S
+Got:GamePhase:Move:W:S
+Got:GamePhase:MoveDone:W:5S
+Got:GamePhase:Move:S:S
+Send:GamePhase:Move:S:5C: NoCards
+Got:GamePhase:MoveDone:S:5C
+Got:GamePhase:Move:E:S
+Got:GamePhase:MoveDone:E:12S
+Got:GamePhase:Winner:1:S
+Got:GamePhase:Move:S:0
+Send:GamePhase:Move:S:9C: NoCards
+Got:GamePhase:MoveDone:S:9C
+Got:GamePhase:Move:E:C
+Got:GamePhase:MoveDone:E:13C
+Got:GamePhase:Move:N:C
+Send:GamePhase:Move:N:14C: NoCards
+Got:GamePhase:MoveDone:N:14C
+Got:GamePhase:Move:W:C
+Got:GamePhase:MoveDone:W:4C
+Got:GamePhase:Winner:1:N
+Got:GamePhase:Move:N:0
+Send:GamePhase:Move:N:9S: NoCards
+Got:GamePhase:MoveDone:N:9S
+Got:GamePhase:Move:W:S
+Got:GamePhase:MoveDone:W:4S
+Got:GamePhase:Move:S:S
+Send:GamePhase:Move:S:3C: NoCards
+Got:GamePhase:MoveDone:S:3C
+Got:GamePhase:Move:E:S
+Got:GamePhase:MoveDone:E:10S
+Got:GamePhase:Winner:1:S
+Got:GamePhase:Move:S:0
+Send:GamePhase:Move:S:9H: NoCards
+Got:GamePhase:MoveDone:S:9H
+Got:GamePhase:Move:E:H
+Got:GamePhase:MoveDone:E:11H
+Got:GamePhase:Move:N:H
+Send:GamePhase:Move:N:14H: NoCards
+Got:GamePhase:MoveDone:N:14H
+Got:GamePhase:Move:W:H
+Got:GamePhase:MoveDone:W:6H
+Got:GamePhase:Winner:1:N
+Got:GamePhase:Move:N:0
+Send:GamePhase:Move:N:8S: NoCards
+Got:GamePhase:MoveDone:N:8S
+Got:GamePhase:Move:W:S
+Got:GamePhase:MoveDone:W:2S
+Got:GamePhase:Move:S:S
+Send:GamePhase:Move:S:5H: NoCards
+Got:GamePhase:MoveDone:S:5H
+Got:GamePhase:Move:E:S
+Got:GamePhase:MoveDone:E:6S
+Got:GamePhase:Winner:1:N
+Got:GamePhase:Move:N:0
+Send:GamePhase:Move:N:12H: NoCards
+Got:GamePhase:MoveDone:N:12H
+Got:GamePhase:Move:W:H
+Got:GamePhase:MoveDone:W:13H
+Got:GamePhase:Move:S:H
+Send:GamePhase:Move:S:11D: NoCards
+Got:GamePhase:MoveDone:S:11D
+Got:GamePhase:Move:E:H
+Got:GamePhase:MoveDone:E:8H
+Got:GamePhase:Winner:0:W
+Got:GamePhase:Move:W:0
+Got:GamePhase:MoveDone:W:4H
+Got:GamePhase:Move:S:H
+Send:GamePhase:Move:S:9D: NoCards
+Got:GamePhase:MoveDone:S:9D
+Got:GamePhase:Move:E:H
+Got:GamePhase:MoveDone:E:7H
+Got:GamePhase:Move:N:H
+Send:GamePhase:Move:N:10H: NoCards
+Got:GamePhase:MoveDone:N:10H
+Got:GamePhase:Winner:1:N
+Got:GamePhase:Move:N:0
+Send:GamePhase:Move:N:14D: NoCards
+Got:GamePhase:MoveDone:N:14D
+Got:GamePhase:Move:W:D
+Got:GamePhase:MoveDone:W:6D
+Got:GamePhase:Move:S:D
+Send:GamePhase:Move:S:8D: NoCards
+Got:GamePhase:MoveDone:S:8D
+Got:GamePhase:Move:E:D
+Got:GamePhase:MoveDone:E:13D
+Got:GamePhase:Winner:1:N
+Got:GamePhase:Move:N:0
+Send:GamePhase:Move:N:12D: NoCards
+Got:GamePhase:MoveDone:N:12D
+Got:GamePhase:Move:W:D
+Got:GamePhase:MoveDone:W:2D
+Got:GamePhase:Move:S:D
+Send:GamePhase:Move:S:7D: NoCards
+Got:GamePhase:MoveDone:S:7D
+Got:GamePhase:Move:E:D
+Got:GamePhase:MoveDone:E:10D
+Got:GamePhase:Winner:1:N
+Got:GamePhase:Move:N:0
+Send:GamePhase:Move:N:5D: NoCards
+Got:GamePhase:MoveDone:N:5D
+Got:GamePhase:Move:W:D
+Got:GamePhase:MoveDone:W:3H
+Got:GamePhase:Move:S:D
+Send:GamePhase:Move:S:8C: NoCards
+Got:GamePhase:MoveDone:S:8C
+Got:GamePhase:Move:E:D
+Got:GamePhase:MoveDone:E:3D
+Got:GamePhase:Winner:1:S
+Got:GamePhase:Move:S:0
+Send:GamePhase:Move:S:7C: NoCards
+Got:GamePhase:MoveDone:S:7C
+Got:GamePhase:Move:E:C
+Got:GamePhase:MoveDone:E:12C
+Got:GamePhase:Move:N:C
+Send:GamePhase:Move:N:2C: NoCards
+Got:GamePhase:MoveDone:N:2C
+Got:GamePhase:Move:W:C
+Got:GamePhase:MoveDone:W:10C
+Got:GamePhase:Winner:0:E
+Got:GamePhase:Move:E:0
+Got:GamePhase:MoveDone:E:11C
+Got:GamePhase:Move:N:C
+Send:GamePhase:Move:N:4D: NoCards
+Got:GamePhase:MoveDone:N:4D
+Got:GamePhase:Move:W:C
+Got:GamePhase:MoveDone:W:2H
+Got:GamePhase:Move:S:C
+Send:GamePhase:Move:S:6C: WithCards
+Got:GamePhase:MoveDone:S:6C
+Got:GamePhase:Winner:0:E
+Got:Score:Score: A 130 B 0 C 130 D 0
+Send:PlayAgain
+Got:Players:A:N:B:W:C:S:D:E
+Got:Cards:2C:13C:14C:8D:11D:8H:10H:12H:14H:3S:10S:11S:13S
+Send:CardsAcquired
+Got:Players:A:N:B:W:C:S:D:E
+Got:Bidding:N:0:BA:Auction phase started: 
+Send:Bidding:N:Bid:1:C
+Got:Bidding:W:1:C:N:bid 1C
+Got:Bidding:S:1:C:W:passed
+Got:Bidding:E:1:C:S:passed
+Got:GamePhase:Initialization:S:1C:NS:0
+Send:GamePhase:PartnerCards:2C:13C:14C:8D:11D:8H:10H:12H:14H:3S:10S:11S:13S
+Got:GamePhase:DummyCards:3C:6C:8C:9C:3D:6D:10D:3H:7H:9H:6S:8S:9S
+Send:GamePhase:ReadyToPlay
+Send:GamePhase:Move:N:13S: NoCards

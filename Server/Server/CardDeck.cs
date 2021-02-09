@@ -7,7 +7,7 @@ namespace Server
 {
     public class CardDeck
     { 
-        List<string> cards=new List<string>();
+        private List<string> cards=new List<string>();
 
         public void CreateDeck()
         {

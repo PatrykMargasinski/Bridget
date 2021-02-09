@@ -8,12 +8,15 @@ namespace Server
     public class Score
     {
         string trump;
+        string previousWinners;
+        string contractTeam;
         int contractTricks;
         int gotTricks;
         bool counter;
         bool recounter;
         int score = 0;
-        public Score(string contract, int gotTricks, bool counter, bool recounter)
+        public string vulneableTeam;
+        public Score(string contract, int gotTricks, bool counter, bool recounter, string contractTeam, string prevWinners)
         {
             string[] temp = contract.Split(":");
             this.trump = temp[1];
@@ -21,6 +24,8 @@ namespace Server
             this.gotTricks = gotTricks;
             this.counter = counter;
             this.recounter = recounter;
+            this.previousWinners = prevWinners;
+            this.contractTeam = contractTeam;
         }
 
         bool ContractPassed()
@@ -28,18 +33,12 @@ namespace Server
             return gotTricks >= contractTricks + 6;
         }
 
-        void ComputeScore()
+        bool IsVulneable()
         {
-            if(ContractPassed()==false)
-            {
-                score = ComputeScoreNegative();
-            }
-            else
-            {
-                if (recounter) score = ComputeScorePositiveRecounter();
-                else if (counter) score = ComputeScorePositiveCounter();
-                else score = ComputeScorePositiveNoCR();
-            }
+            if (previousWinners == "0") return false;
+            if (previousWinners == "both") return true;
+            if (previousWinners == contractTeam) return true;
+            else return false;
         }
 
         int ComputeScorePositiveNoCR()
@@ -66,7 +65,7 @@ namespace Server
             else throw new ArgumentException("There is no color like " + trump);
 
             if (contractScore < 100) bonusScore = 50;
-            else bonusScore = 300;
+            else bonusScore = IsVulneable()?500:300;
 
             if (contractTricks + 6 == 12) bonusScore += 500;
             else if (contractTricks + 6 == 13) bonusScore += 1000;
@@ -96,6 +95,30 @@ namespace Server
             return score;
         }
 
+        int ComputeScoreNegativeVulneable()
+        {
+            int penalty = (contractTricks + 6 - gotTricks);
+            if (recounter)
+            {
+                if (penalty == 1) score = -400;
+                else if (penalty == 2) score = -1000;
+                else if (penalty == 3) score = -1600;
+                else score = -1600 - 600 * (penalty - 3);
+            }
+            else if (counter)
+            {
+                if (penalty == 1) score = -200;
+                else if (penalty == 2) score = -500;
+                else if (penalty == 3) score = -800;
+                else score = -800 - 300 * (penalty - 3);
+            }
+            else
+            {
+                score = penalty * -100;
+            }
+            return score;
+        }
+
         int ComputeScorePositiveCounter()
         {
             int contractScore = 0;
@@ -115,9 +138,10 @@ namespace Server
             }
             else throw new ArgumentException("There is no color like " + trump);
             overContractScore = (gotTricks - contractTricks - 6) * 100;
+            if (IsVulneable()) overContractScore *= 2;
 
             if (contractScore  < 100) bonusScore = 100;
-            else bonusScore = 350;
+            else bonusScore = IsVulneable() ? 550 : 350;
 
             if (contractTricks + 6 == 12) bonusScore += 500;
             else if (contractTricks + 6 == 13) bonusScore += 1000;
@@ -143,9 +167,10 @@ namespace Server
             }
             else throw new ArgumentException("There is no color like " + trump);
             overContractScore = (gotTricks - contractTricks - 6) * 200;
+            if (IsVulneable()) overContractScore *= 2;
 
             if (contractScore < 100) bonusScore = 150;
-            else bonusScore = 400;
+            else bonusScore = IsVulneable() ? 600 : 400;
 
             if (contractTricks + 6 == 12) bonusScore += 500;
             else if (contractTricks + 6 == 13) bonusScore += 1000;
@@ -154,7 +179,19 @@ namespace Server
 
         public int GetScore()
         {
-            ComputeScore();
+            if (ContractPassed() == false)
+            {
+                if (IsVulneable())
+                    score = ComputeScoreNegativeVulneable();
+                else
+                    score = ComputeScoreNegative();
+            }
+            else
+            {
+                if (recounter) score = ComputeScorePositiveRecounter();
+                else if (counter) score = ComputeScorePositiveCounter();
+                else score = ComputeScorePositiveNoCR();
+            }
             return score;
         }
     }
